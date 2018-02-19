@@ -42,7 +42,7 @@ namespace EUTK
                 m_TreeItemContainer = configSource.GetValue<FolderTreeItemContainer>(containerConfigName);
                 if (m_TreeItemContainer == null)
                 {
-                    m_TreeItemContainer = new FolderTreeItemContainer();
+                    m_TreeItemContainer = ScriptableObject.CreateInstance<FolderTreeItemContainer>();
                     m_TreeItemContainer.ConfigSource = configSource;
                     configSource.SetValue(containerConfigName, m_TreeItemContainer);
                     configSource.SetConfigDirty();
