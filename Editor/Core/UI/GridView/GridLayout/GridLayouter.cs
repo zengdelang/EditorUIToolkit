@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace EUTK
 {
-    public abstract class GridLayout
+    public abstract class GridLayouter
     {
         protected GridView m_Owner;
         protected GridViewDataSource m_DataSource;
@@ -42,7 +42,7 @@ namespace EUTK
             get { return m_DataSource; }
         }
 
-        protected GridLayout(GridViewDataSource dataSource)
+        protected GridLayouter(GridViewDataSource dataSource)
         {
             m_DataSource = dataSource;
         }

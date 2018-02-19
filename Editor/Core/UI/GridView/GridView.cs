@@ -29,7 +29,7 @@ namespace EUTK
         public Rect m_TotalRect;
         protected Rect m_VisibleRect;
 
-        protected GridLayout m_GridLayout;
+        protected GridLayouter m_GridLayouter;
         protected GridViewDataSource m_DataSource;
 
         protected GridViewHandler m_GridViewHandler;
@@ -44,9 +44,9 @@ namespace EUTK
             get { return m_ViewConfig; }
         }
 
-        public GridLayout ViewLayout
+        public GridLayouter ViewLayouter
         {
-            get { return m_GridLayout; }
+            get { return m_GridLayouter; }
         }
 
         public Rect VisibleRect
@@ -98,17 +98,17 @@ namespace EUTK
 
         public Action<int, bool> ItemExpandedAction { get; set; }
 
-        public GridView(ViewGroupManager owner, GridLayout gridLayout, GridViewHandler viewHandler = null) : base(owner)
+        public GridView(ViewGroupManager owner, GridLayouter gridLayouter, GridViewHandler viewHandler = null) : base(owner)
         {
             m_ViewConfig = new GridViewConfig();
-            m_GridLayout = gridLayout;
-            m_DataSource = m_GridLayout.DataSource;
+            m_GridLayouter = gridLayouter;
+            m_DataSource = m_GridLayouter.DataSource;
             m_GridViewHandler = viewHandler;
             if (m_GridViewHandler == null)
             {
                 m_GridViewHandler = new GridViewHandler(m_DataSource);
             }
-            m_GridLayout.Owner = this;
+            m_GridLayouter.Owner = this;
             m_RenameOverlay.Clear();
         }
 
@@ -205,10 +205,10 @@ namespace EUTK
                 switch (Event.current.keyCode)
                 {
                     case KeyCode.UpArrow:
-                        num = -m_GridLayout.LayoutParams.Columns;
+                        num = -m_GridLayouter.LayoutParams.Columns;
                         break;
                     case KeyCode.DownArrow:
-                        num = m_GridLayout.LayoutParams.Columns;
+                        num = m_GridLayouter.LayoutParams.Columns;
                         break;
                     case KeyCode.RightArrow:
                         if (AllowLeftRightArrowNavigation())
@@ -273,7 +273,7 @@ namespace EUTK
             }
             else
             {
-                if (!ViewConfig.AllowFindNextShortcut || !m_GridLayout.DoCharacterOffsetSelection())
+                if (!ViewConfig.AllowFindNextShortcut || !m_GridLayouter.DoCharacterOffsetSelection())
                     return;
                 Event.current.Use();
             }
@@ -285,9 +285,9 @@ namespace EUTK
                 !m_TotalRect.Contains(Event.current.mousePosition))
                 return;
 
-            var minGridSize = m_GridLayout.LayoutParams.MinGridSize;
-            var minIconSize = m_GridLayout.LayoutParams.MinIconSize;
-            var maxGridSize = m_GridLayout.LayoutParams.MaxGridSize;
+            var minGridSize = m_GridLayouter.LayoutParams.MinGridSize;
+            var minIconSize = m_GridLayouter.LayoutParams.MinIconSize;
+            var maxGridSize = m_GridLayouter.LayoutParams.MaxGridSize;
             int delta = Event.current.delta.y <= 0.0 ? 1 : -1;
             GridSize = Mathf.Clamp(GridSize + delta * 7, minGridSize, maxGridSize);
 
@@ -308,8 +308,8 @@ namespace EUTK
                 CalculateLayout();
             }
 
-            Rect viewRect = new Rect(0.0f, 0.0f, 1f, m_GridLayout.LayoutParams.Height);
-            bool moreHigh = m_GridLayout.LayoutParams.Height > m_TotalRect.height;
+            Rect viewRect = new Rect(0.0f, 0.0f, 1f, m_GridLayouter.LayoutParams.Height);
+            bool moreHigh = m_GridLayouter.LayoutParams.Height > m_TotalRect.height;
 
             m_VisibleRect = m_TotalRect;
             var scrollbarWidth = 16f;
@@ -319,7 +319,7 @@ namespace EUTK
             m_ViewConfig.ScrollPosition = GUI.BeginScrollView(m_TotalRect, m_ViewConfig.ScrollPosition, viewRect);
 
             Vector2 scrollPos = m_ViewConfig.ScrollPosition;
-            m_GridLayout.Draw(0, scrollPos);
+            m_GridLayouter.Draw(0, scrollPos);
 
             HandlePing();
             GUI.EndScrollView();
@@ -331,7 +331,7 @@ namespace EUTK
                 return;
 
             int maxIdx = GetMaxIdx();
-            if (m_GridLayout.LayoutParams.MaxGridSize == -1)
+            if (m_GridLayouter.LayoutParams.MaxGridSize == -1)
                 return;
 
             int selectedAssetIdx = GetSelectedItemIndex();
@@ -379,13 +379,13 @@ namespace EUTK
 
         private int GetMaxIdx()
         {
-            return m_GridLayout.ItemCount > 0 ? m_GridLayout.ItemCount - 1 : -1;
+            return m_GridLayouter.ItemCount > 0 ? m_GridLayouter.ItemCount - 1 : -1;
         }
 
         private void DoOffsetSelectionSpecialKeys(int idx, int maxIndex)
         {
-            float num = m_GridLayout.LayoutParams.ItemSize.y + m_GridLayout.LayoutParams.VerticalSpacing;
-            int columns = m_GridLayout.LayoutParams.Columns;
+            float num = m_GridLayouter.LayoutParams.ItemSize.y + m_GridLayouter.LayoutParams.VerticalSpacing;
+            int columns = m_GridLayouter.LayoutParams.Columns;
             switch (m_SelectionOffset)
             {
                 case kPageDown:
@@ -441,7 +441,7 @@ namespace EUTK
         public void SelectFirst()
         {
             int selectedIdx = 0;
-            if (m_GridLayout.ItemCount > 0)
+            if (m_GridLayouter.ItemCount > 0)
                 selectedIdx = 0;
             SetSelectedItemByIndex(selectedIdx);
         }
@@ -478,13 +478,13 @@ namespace EUTK
         private void SetSelectedItemByIndex(int selectedIndex)
         {
             int itemId;
-            if (m_GridLayout.ItemIdAtIndex(selectedIndex, out itemId))
+            if (m_GridLayouter.ItemIdAtIndex(selectedIndex, out itemId))
             {
-                ScrollToPosition(AdjustRectForFraming(m_GridLayout.LayoutParams.CalculateItemRect(selectedIndex)));
+                ScrollToPosition(AdjustRectForFraming(m_GridLayouter.LayoutParams.CalculateItemRect(selectedIndex)));
                 int[] selectedInstanceIDs;
                 if (IsItemCurrentlySelected())
                 {
-                    selectedInstanceIDs = m_GridLayout.GetNewSelection(itemId, false, true).ToArray();
+                    selectedInstanceIDs = m_GridLayouter.GetNewSelection(itemId, false, true).ToArray();
                 }
                 else
                 {
@@ -547,9 +547,9 @@ namespace EUTK
                     m_Ping.m_TimeStart = Time.realtimeSinceStartup;
                     m_Ping.m_AvailableWidth = m_VisibleRect.width;
                     m_pingIndex = index;
-                    GUIContent content = new GUIContent(!m_GridLayout.ListMode ? GetCroppedLabelText(itemId, fullText, m_WidthUsedForCroppingName) : fullText);
+                    GUIContent content = new GUIContent(!m_GridLayouter.ListMode ? GetCroppedLabelText(itemId, fullText, m_WidthUsedForCroppingName) : fullText);
 
-                    if (m_GridLayout.ListMode)
+                    if (m_GridLayouter.ListMode)
                     {
                         m_Ping.m_PingStyle = s_Styles.ping;
                         Vector2 vector = m_Ping.m_PingStyle.CalcSize(content);
@@ -558,7 +558,7 @@ namespace EUTK
                         m_LeftPaddingForPinging = item.IsChildItem ? 0x1c : 16;
                         m_Ping.m_ContentDraw = (rect) =>
                         {
-                            GridLayout.DrawIconAndLabel(rect, item.DisplayName, (Texture2D)item.Texture, false, false);
+                            GridLayouter.DrawIconAndLabel(rect, item.DisplayName, (Texture2D)item.Texture, false, false);
                         };
                     }
                     else
@@ -586,8 +586,8 @@ namespace EUTK
 
         private Vector2 CalculatePingPosition()
         {
-            Rect rect = m_GridLayout.LayoutParams.CalculateItemRect(m_pingIndex);
-            if (m_GridLayout.ListMode)
+            Rect rect = m_GridLayouter.LayoutParams.CalculateItemRect(m_pingIndex);
+            if (m_GridLayouter.ListMode)
             {
                 return new Vector2(m_LeftPaddingForPinging, rect.y);
             }
@@ -602,7 +602,7 @@ namespace EUTK
 
         private void HandlePing()
         {
-            if (m_Ping.isPinging && !m_GridLayout.ListMode)
+            if (m_Ping.isPinging && !m_GridLayouter.ListMode)
             {
                 Vector2 pingPosition = CalculatePingPosition();
                 m_Ping.m_ContentRect.x = pingPosition.x;
@@ -616,8 +616,8 @@ namespace EUTK
 
         private bool AllowLeftRightArrowNavigation()
         {
-            if (!m_GridLayout.LayoutParams.ListMode && !Event.current.alt)
-                return m_GridLayout.ItemCount > 1;
+            if (!m_GridLayouter.LayoutParams.ListMode && !Event.current.alt)
+                return m_GridLayouter.ItemCount > 1;
             return false;
         }
 
@@ -631,29 +631,29 @@ namespace EUTK
         private void CalculateLayout()
         {
             if (GridSize < 20)
-                GridSize = m_GridLayout.LayoutParams.MinGridSize;
-            else if (GridSize < m_GridLayout.LayoutParams.MinIconSize)
-                GridSize = m_GridLayout.LayoutParams.MinIconSize;
+                GridSize = m_GridLayouter.LayoutParams.MinGridSize;
+            else if (GridSize < m_GridLayouter.LayoutParams.MinIconSize)
+                GridSize = m_GridLayouter.LayoutParams.MinIconSize;
 
             if (IsListMode())
             {
-                m_GridLayout.ListMode = true;
-                UpdateGroupSizes(m_GridLayout);
+                m_GridLayouter.ListMode = true;
+                UpdateGroupSizes(m_GridLayouter);
             }
             else
             {
-                m_GridLayout.ListMode = false;
-                UpdateGroupSizes(m_GridLayout);
+                m_GridLayouter.ListMode = false;
+                UpdateGroupSizes(m_GridLayouter);
 
-                if (m_TotalRect.height < m_GridLayout.LayoutParams.Height)
+                if (m_TotalRect.height < m_GridLayouter.LayoutParams.Height)
                 {
-                    m_GridLayout.LayoutParams.FixedWidth = m_TotalRect.width - 16f;
-                    m_GridLayout.LayoutParams.CalculateLayoutParams(m_GridLayout.ItemCount, m_GridLayout.LayoutParams.CalculateRows(m_GridLayout.ItemsWantedShown));
+                    m_GridLayouter.LayoutParams.FixedWidth = m_TotalRect.width - 16f;
+                    m_GridLayouter.LayoutParams.CalculateLayoutParams(m_GridLayouter.ItemCount, m_GridLayouter.LayoutParams.CalculateRows(m_GridLayouter.ItemsWantedShown));
                 }
             }
         }
 
-        private void UpdateGroupSizes(GridLayout g)
+        private void UpdateGroupSizes(GridLayouter g)
         {
             if (g.ListMode)
             {
@@ -691,7 +691,7 @@ namespace EUTK
             int id = m_ViewConfig.SelectedItemIdList[0];
             GridItem item = null;
             bool findItem = false;
-            for (int i = 0, count = m_GridLayout.ItemCount; i < count; ++i)
+            for (int i = 0, count = m_GridLayouter.ItemCount; i < count; ++i)
             {
                 item = m_DataSource.GetItemByIndex(i);
                 if (item.Id == id)
@@ -739,7 +739,7 @@ namespace EUTK
                     m_InstanceIDToCroppedNameMap.Remove(id);
                 }
 
-                for (int i = 0, count = m_GridLayout.ItemCount; i < count; ++i)
+                for (int i = 0, count = m_GridLayouter.ItemCount; i < count; ++i)
                 {
                     var item = m_DataSource.GetItemByIndex(i);
                     if (item.Id == id)
@@ -787,7 +787,7 @@ namespace EUTK
 
             if (frame)
             {
-                CenterRect(AdjustRectForFraming(m_GridLayout.LayoutParams.CalculateItemRect(itemIdx)));
+                CenterRect(AdjustRectForFraming(m_GridLayouter.LayoutParams.CalculateItemRect(itemIdx)));
             }
             return true;
         }
@@ -841,7 +841,7 @@ namespace EUTK
 
         private int GetMaxNumVisibleItems()
         {
-            return m_GridLayout.LayoutParams.GetMaxVisibleItems(m_TotalRect.height);
+            return m_GridLayouter.LayoutParams.GetMaxVisibleItems(m_TotalRect.height);
         }
 
         #endregion

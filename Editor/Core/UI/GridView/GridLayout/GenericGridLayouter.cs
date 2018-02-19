@@ -4,13 +4,13 @@ using UnityEngine;
 
 namespace EUTK
 {
-    public class GenericGridLayout : GridLayout
+    public class GenericGridLayouter : GridLayouter
     {
         private GUIContent m_Content = new GUIContent();
         private List<int> m_DragSelection = new List<int>();
         private int m_DropTargetControlID;
 
-        public GenericGridLayout(GridViewDataSource dataSource) : base(dataSource)
+        public GenericGridLayouter(GridViewDataSource dataSource) : base(dataSource)
         {
 
         }

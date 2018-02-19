@@ -32,7 +32,7 @@ namespace EUTK
             m_SearchBar.OnTextChangedAction += (str) => UpdateItemsBySearchText();
 
             m_GridViewDataSource = new GridViewDataSource();
-            m_GridView = new GridView(owner, new GenericGridLayout(m_GridViewDataSource));
+            m_GridView = new GridView(owner, new GenericGridLayouter(m_GridViewDataSource));
             m_GridView.KeyboardCallback += ListAreaKeyboardCallback;
             m_GridView.ItemExpandedAction += ItemExpandedAction;
             m_GridView.BeginRenameAction += ItemBeginRenameAction;
@@ -45,8 +45,8 @@ namespace EUTK
 
             m_BottomBar = new BottomBar(owner);
             m_BottomBar.Value = m_GridView.GridSize;
-            m_BottomBar.MinValue = m_GridView.ViewLayout.LayoutParams.MinGridSize;
-            m_BottomBar.MaxValue = m_GridView.ViewLayout.LayoutParams.MaxGridSize;
+            m_BottomBar.MinValue = m_GridView.ViewLayouter.LayoutParams.MinGridSize;
+            m_BottomBar.MaxValue = m_GridView.ViewLayouter.LayoutParams.MaxGridSize;
             m_BottomBar.OnValueChangedAction += (size) =>
             {
                 m_GridView.GridSize = size;

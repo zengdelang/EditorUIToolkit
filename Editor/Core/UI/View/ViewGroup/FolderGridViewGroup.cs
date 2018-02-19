@@ -73,7 +73,7 @@ namespace EUTK
             m_FolderTreeViewGroup = new FolderTreeViewGroup(owner, configSource, stateConfigName, containerConfigName, dragId);
 
             m_GridViewDataSource = new GridViewDataSource();
-            var layout = new GenericGridLayout(m_GridViewDataSource);
+            var layout = new GenericGridLayouter(m_GridViewDataSource);
             var viewHandler = new FolderGridViewHandler(layout.DataSource);
             viewHandler.TreeViewDragging = m_FolderTreeViewGroup.GetTreeViewDragging();
             m_GridView = new GridView(owner, layout, viewHandler);
@@ -99,8 +99,8 @@ namespace EUTK
 
             m_BottomBar = new BottomBar(owner);
             m_BottomBar.Value = m_GridView.GridSize;
-            m_BottomBar.MinValue = m_GridView.ViewLayout.LayoutParams.MinGridSize;
-            m_BottomBar.MaxValue = m_GridView.ViewLayout.LayoutParams.MaxGridSize;
+            m_BottomBar.MinValue = m_GridView.ViewLayouter.LayoutParams.MinGridSize;
+            m_BottomBar.MaxValue = m_GridView.ViewLayouter.LayoutParams.MaxGridSize;
             m_BottomBar.OnValueChangedAction += (size) =>
             {
                 m_GridView.GridSize = size;
