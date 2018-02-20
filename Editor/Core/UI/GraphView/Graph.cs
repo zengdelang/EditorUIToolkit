@@ -625,6 +625,7 @@ namespace EUTK
                 var go = CreateInstance<GraphInspectorGUI>();
                 go.node = node;
                 go.showNode = true;
+                go.isShowingValidInfo = true;
                 Selection.activeObject = go;
                 return;
             }
@@ -635,8 +636,10 @@ namespace EUTK
                 var go = CreateInstance<GraphInspectorGUI>();
                 go.conn = conn;
                 go.showNode = false;
+                go.isShowingValidInfo = true;
                 Selection.activeObject = go;
             }
+
         }
 
         protected virtual GenericMenu GetAddNodeMenu(Vector2 canvasMousePos)

@@ -1,4 +1,5 @@
 ﻿using UnityEditor;
+using UnityEngine;
 
 namespace EUTK
 {
@@ -8,6 +9,8 @@ namespace EUTK
         public override void OnInspectorGUI()
         {
             var graphGUI = target as GraphInspectorGUI;
+            if (!graphGUI.isShowingValidInfo)
+                Selection.activeObject = null;
 
             if (graphGUI.showNode)
             {

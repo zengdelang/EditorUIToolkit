@@ -80,7 +80,7 @@ namespace EUTK
     public class Node14 : Node1
     {
         [SerializeField]
-        protected string haha11 = "";
+        public string haha11 = "";
 
 
         sealed public override int maxOutConnections { get { return 0; } }
@@ -92,7 +92,7 @@ namespace EUTK
             get { return -1; }
         }
 
-        protected override void OnNodeGUI()
+        protected override void OnNodeGUI() 
         {
             base.OnNodeGUI();
             haha11=EditorGUILayout.TextArea(haha11);
@@ -194,6 +194,7 @@ namespace EUTK
                 m_TreeView.SetSelection(new int[] { newItem.id }, true);
                 m_TreeView.data.RefreshData();
 
+                TreeViewSelectionChanged(new int[] { newItem.id });
                 m_WindowConfigSource.SetConfigDirty();
             });
             g.ShowAsContext();
