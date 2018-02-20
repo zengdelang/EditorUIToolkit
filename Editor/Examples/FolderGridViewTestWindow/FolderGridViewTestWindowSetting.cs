@@ -6,7 +6,7 @@ namespace EUTK
     {
         [JsonMember] protected string m_SearchText;
         [JsonMember] protected GridViewConfig m_GvConfig;
-        [JsonMember] protected float splitLineX;
+        [JsonMember] protected float m_SplitLineX;
         [JsonMember] protected TreeViewState m_TreeViewStateConfig;
         [JsonMember] protected FolderTreeItemContainer m_TreeViewDataContainer;
         [JsonMember] protected FolderGridItem m_BottomSelectedItem;
@@ -29,10 +29,10 @@ namespace EUTK
             set { m_GvConfig = value; }
         }
 
-        public float SplitLineX
+        public float splitLineX
         {
-            get { return splitLineX; }
-            set { splitLineX = value; }
+            get { return m_SplitLineX; }
+            set { m_SplitLineX = value; }
         }
 
         public TreeViewState TreeViewStateConfig
@@ -58,7 +58,7 @@ namespace EUTK
     {
         [JsonMember] protected string m_SearchText;
         [JsonMember] protected GridViewConfig m_GvConfig;
-        [JsonMember] protected float splitLineX;
+        [JsonMember] protected float m_SplitLineX;
         [JsonMember] protected TreeViewState m_TreeViewStateConfig;
         [JsonMember] protected FolderTreeItemContainer m_TreeViewDataContainer;
         [JsonMember] protected FolderGridItem m_BottomSelectedItem;
@@ -81,10 +81,10 @@ namespace EUTK
             set { m_GvConfig = value; }
         }
 
-        public float SplitLineX
+        public float splitLineX
         {
-            get { return splitLineX; }
-            set { splitLineX = value; }
+            get { return m_SplitLineX; }
+            set { m_SplitLineX = value; }
         }
 
         public TreeViewState TreeViewStateConfig

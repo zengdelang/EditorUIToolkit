@@ -8,39 +8,41 @@ namespace EUTK
 {
     public class ObjectTreeViewGroup : ViewGroup
     {
-        private TreeViewState m_TreeViewState;
-        private ObjectTreeViewDataSource m_DataSource;
-        private ObjectTreeViewGUI m_TreeViewGUI;
-        private ObjectTreeViewDragging m_TreeViewDragging;
-        private TreeView m_TreeView;
+        private readonly EditorWindowConfigSource m_ConfigSource;
 
         private bool m_Init;
-        private EditorWindowConfigSource m_ConfigSource;
-        private TreeItemContainer m_TreeItemContainer;
+        private bool m_NeedUndo = true;
+        private readonly TreeItemContainer m_TreeItemContainer;
+        private readonly TreeView m_TreeView;
+        private readonly ObjectTreeViewDragging m_TreeViewDragging;
+        private readonly ObjectTreeViewGUI m_TreeViewGUI;
+        private readonly TreeViewState m_TreeViewState;
 
-        public Action DuplicateItemsAction { get; set; }
-        public Action<bool> DeleteItemsAction { get; set; }
-
-        public ObjectTreeViewGroup(ViewGroupManager owner, EditorWindowConfigSource configSource, string stateConfigName, string containerConfigName, string dragId = null) : base(owner)
+        public ObjectTreeViewGroup(ViewGroupManager owner, EditorWindowConfigSource configSource,
+            string stateConfigName, string containerConfigName, string dragId = null) : base(owner)
         {
             m_ConfigSource = configSource;
             if (configSource != null)
             {
-                m_TreeViewState = configSource.GetValue<TreeViewState>(stateConfigName);
+                if (configSource.FindProperty(stateConfigName) != null)
+                    m_TreeViewState = configSource.GetValue<TreeViewState>(stateConfigName);
                 if (m_TreeViewState == null)
                 {
                     m_TreeViewState = new TreeViewState();
-                    configSource.SetValue(stateConfigName, m_TreeViewState);
+                    if (configSource.FindProperty(stateConfigName) != null)
+                        configSource.SetValue(stateConfigName, m_TreeViewState);
                     configSource.SetConfigDirty();
                 }
                 m_TreeViewState.SetConfigSource(configSource);
 
-                m_TreeItemContainer = configSource.GetValue<TreeItemContainer>(containerConfigName);
+                if (configSource.FindProperty(containerConfigName) != null)
+                    m_TreeItemContainer = configSource.GetValue<TreeItemContainer>(containerConfigName);
                 if (m_TreeItemContainer == null)
                 {
                     m_TreeItemContainer = ScriptableObject.CreateInstance<TreeItemContainer>();
                     m_TreeItemContainer.ConfigSource = configSource;
-                    configSource.SetValue(containerConfigName, m_TreeItemContainer);
+                    if (configSource.FindProperty(containerConfigName) != null)
+                        configSource.SetValue(containerConfigName, m_TreeItemContainer);
                     configSource.SetConfigDirty();
                 }
                 else
@@ -54,22 +56,41 @@ namespace EUTK
                 m_TreeViewState = new TreeViewState();
 
             m_TreeView = new TreeView(owner.WindowOwner, m_TreeViewState);
-            m_DataSource = new ObjectTreeViewDataSource(m_TreeView, m_TreeItemContainer, m_ConfigSource);
+            dataSource = new ObjectTreeViewDataSource(m_TreeView, m_TreeItemContainer, m_ConfigSource);
             m_TreeViewGUI = new ObjectTreeViewGUI(m_TreeView);
-            m_TreeViewDragging = new ObjectTreeViewDragging(m_TreeView, dragId != null ? dragId : m_TreeView.GetHashCode().ToString());
+            m_TreeViewDragging = new ObjectTreeViewDragging(m_TreeView,
+                dragId != null ? dragId : m_TreeView.GetHashCode().ToString());
 
             DeleteItemsAction += DeleteItems;
             DuplicateItemsAction += DuplicateItems;
 
             m_TreeViewGUI.BeginRenameAction += () =>
             {
-                Undo.RegisterCompleteObjectUndo(m_TreeItemContainer, "Rename Item");
+                if (needUndo)
+                    Undo.RegisterCompleteObjectUndo(m_TreeItemContainer, "Rename Item");
             };
             m_TreeViewDragging.PrepareDoDrag += () =>
             {
-                Undo.RegisterCompleteObjectUndo(m_TreeItemContainer, "Reparent Item");
+                if (needUndo)
+                    Undo.RegisterCompleteObjectUndo(m_TreeItemContainer, "Reparent Item");
             };
         }
+
+        public bool needUndo
+        {
+            get { return m_NeedUndo; }
+            set { m_NeedUndo = value; }
+        }
+
+        public Action DuplicateItemsAction { get; set; }
+
+        public Action<bool> DeleteItemsAction { get; set; }
+
+        public Action DeleteDoneAction { get; set; }
+
+        public Action OnGUIInitAction { get; set; }
+
+        public ObjectTreeViewDataSource dataSource { get; private set; }
 
         public override void OnGUI(Rect rect)
         {
@@ -77,12 +98,15 @@ namespace EUTK
             if (!m_Init)
             {
                 m_Init = true;
-                m_TreeView.Init(rect, m_DataSource, m_TreeViewGUI, m_TreeViewDragging);
+                m_TreeView.Init(rect, dataSource, m_TreeViewGUI, m_TreeViewDragging);
                 m_TreeView.ReloadData();
+                if (OnGUIInitAction != null)
+                    OnGUIInitAction();
             }
 
             if (Event.current.type == EventType.MouseDown && rect.Contains(Event.current.mousePosition))
             {
+                m_TreeView.EndNameEditing(true);
                 m_TreeView.EndPing();
             }
 
@@ -106,6 +130,11 @@ namespace EUTK
             return m_TreeView;
         }
 
+        public ObjectTreeViewGUI GetTreeViewGUI()
+        {
+            return m_TreeViewGUI;
+        }
+
         public TreeItemContainer GetDataContainer()
         {
             return m_TreeItemContainer;
@@ -113,13 +142,13 @@ namespace EUTK
 
         private void HandleCommandEventsForTreeView()
         {
-            EventType type = Event.current.type;
+            var type = Event.current.type;
             switch (type)
             {
                 case EventType.ExecuteCommand:
                 case EventType.ValidateCommand:
-                    bool flag = type == EventType.ExecuteCommand;
-                    int[] selection = this.m_TreeView.GetSelection();
+                    var flag = type == EventType.ExecuteCommand;
+                    var selection = m_TreeView.GetSelection();
                     if (selection.Length == 0)
                         return;
                     if (Event.current.commandName == "Delete" || Event.current.commandName == "SoftDelete")
@@ -127,9 +156,12 @@ namespace EUTK
                         Event.current.Use();
                         if (flag)
                         {
-                            bool askIfSure = Event.current.commandName == "SoftDelete";
+                            var askIfSure = Event.current.commandName == "SoftDelete";
                             if (DeleteItemsAction != null)
                                 DeleteItemsAction(askIfSure);
+
+                            if (DeleteDoneAction != null)
+                                DeleteDoneAction();
                         }
                         GUIUtility.ExitGUI();
                     }
@@ -144,20 +176,21 @@ namespace EUTK
                             }
                         }
                         else
+                        {
                             Event.current.Use();
+                        }
                     }
                     break;
             }
-            return;
         }
-
 
         private void DeleteItems(bool ask)
         {
             if (m_TreeView.state.selectedIDs != null &&
                 m_TreeView.state.selectedIDs.Count > 0)
             {
-                Undo.RecordObject(m_TreeItemContainer, "Delete Items");
+                if (needUndo)
+                    Undo.RecordObject(m_TreeItemContainer, "Delete Items");
                 /*if (ask)
                 {
                     if (!EditorUtility.DisplayDialog("删除操作", "确定删除所选的Item吗?", "Delete", "Cancel"))
@@ -168,9 +201,7 @@ namespace EUTK
                 {
                     var item = m_TreeView.data.FindItem(id);
                     if (item != null)
-                    {
                         item.parent.children.Remove(item);
-                    }
                 }
                 m_TreeView.data.RefreshData();
                 SetDirty();
@@ -182,13 +213,17 @@ namespace EUTK
             if (m_TreeView.state.selectedIDs != null &&
                 m_TreeView.state.selectedIDs.Count > 0)
             {
-                Undo.RecordObject(m_TreeItemContainer, "Duplicate Items");
+                if (needUndo)
+                    Undo.RecordObject(m_TreeItemContainer, "Duplicate Items");
                 m_TreeView.EndNameEditing(true);
-                List<int> idList = new List<int>();
+                var idList = new List<int>();
                 foreach (var id in m_TreeView.state.selectedIDs)
                 {
                     var item = m_TreeView.data.FindItem(id);
-                    var newItem = JsonReader.Deserialize(JsonWriter.Serialize(item, new JsonWriterSettings() { MaxDepth = Int32.MaxValue }), true) as TreeViewItem;
+                    var newItem =
+                        JsonReader.Deserialize(
+                            JsonWriter.Serialize(item, new JsonWriterSettings {MaxDepth = int.MaxValue}),
+                            true) as TreeViewItem;
                     item.parent.AddChild(newItem);
                     UpdateItemInfo(newItem, idList, true);
                 }
@@ -207,12 +242,8 @@ namespace EUTK
             item.SetConfigSource(m_ConfigSource);
 
             if (item.hasChildren)
-            {
                 foreach (var child in item.children)
-                {
                     UpdateItemInfo(child, idList, false);
-                }
-            }
         }
 
         private void SetDirty()

@@ -98,6 +98,21 @@ namespace EUTK
 
     }
 
+    public class GMCategoryItem : TreeViewItem
+    {
+        [SerializeField] public Graph graph;
+
+        public GMCategoryItem(int id, int depth, TreeViewItem parent, string displayName) : base(id, depth, parent, displayName)
+        {
+            graph = ScriptableObject.CreateInstance<Graph1>();
+        }
+
+        public GMCategoryItem()
+        {
+            
+        }
+    }
+
     public class GraphEditorWindow : ViewGroupEditorWindow
     {
         [MenuItem("Tools/Eaxamples/GraphEditorWindow", false, 0)]
@@ -106,26 +121,109 @@ namespace EUTK
             GetWindow<GraphEditorWindow>();
         }
 
+        private TreeView m_TreeView;
+        private GraphViewGroup m_GraphViewGroup;
+        private GraphView m_GraphView;
+        private TreeItemContainer m_DataContainer;
+
         protected override void InitData()
         {
             m_WindowConfigSource = FileConfigSource.CreateFileConfigSource("ViewConfig/TestWindow/config6.txt", true, typeof(GraphEditorWindowSetting));
 
-            ViewGroup viewGroup = new ViewGroup(m_LayoutGroupMgr);
-            var graphView = new GraphView(m_LayoutGroupMgr, m_WindowConfigSource);
+            m_GraphViewGroup = new GraphViewGroup(m_LayoutGroupMgr, m_WindowConfigSource, "TreeViewStateConfig", "TreeViewDataContainer");
+            m_GraphView = m_GraphViewGroup.graphView;
 
-            graphView.currentGraph = m_WindowConfigSource.GetValue<Graph>("Graph");
-            if (graphView.currentGraph == null)
+            m_GraphViewGroup.showMainButton = true;
+            m_GraphViewGroup.mainButtonName = "Categories";
+
+            m_DataContainer = m_GraphViewGroup.treeItemContainer;
+            m_TreeView = m_GraphViewGroup.treeView;
+            m_TreeView.useExpansionAnimation = true;
+            m_TreeView.contextClickItemCallback = ContextClickItemCallback;
+            m_TreeView.contextClickOutsideItemsCallback = ContextClickOutsideItemsCallback;
+            m_TreeView.selectionChangedCallback += TreeViewSelectionChanged;
+
+            m_LayoutGroupMgr.AddViewGroup(m_GraphViewGroup);
+
+            m_GraphViewGroup.objectTreeViewGroup.needUndo = false;
+            m_GraphViewGroup.objectTreeViewGroup.DeleteDoneAction += () =>
             {
-                graphView.currentGraph = CreateInstance<Graph1>();
-                m_WindowConfigSource.SetValue("Graph", graphView.currentGraph);
-                m_WindowConfigSource.SetConfigDirty();
-            }
-            graphView.currentGraph.windowConfig = m_WindowConfigSource;
+                TreeViewSelectionChanged(m_TreeView.GetSelection());
+            };
+            m_GraphViewGroup.objectTreeViewGroup.OnGUIInitAction += () =>
+            {
+                TreeViewSelectionChanged(m_TreeView.GetSelection());
+            };
+            m_GraphViewGroup.objectTreeViewGroup.GetTreeViewGUI().RenameEndAction += (item, text) =>
+            {
+                m_TreeView.data.OnSearchChanged();
+            };
 
-            var searchBar = new SearchBar(m_LayoutGroupMgr);
-            viewGroup.AddView(searchBar);
-            viewGroup.AddView(graphView);
-            m_LayoutGroupMgr.AddViewGroup(viewGroup);
+            m_GraphViewGroup.searchBar.OnTextChangedAction += OnTextChangedAction;
+            m_GraphViewGroup.searchBar.LoadConfig("searchText", WindowConfigSource);
+            m_TreeView.state.searchString = m_GraphViewGroup.searchBar.SearchText;
+        }
+
+        private void ContextClickItemCallback(int itemId)
+        {
+            Event.current.Use();
+        }
+
+        private void ContextClickOutsideItemsCallback()
+        {
+            GenericMenu g = new GenericMenu();
+            g.AddItem(new GUIContent("Create Item"), false, () =>
+            {
+                TreeViewItem item = m_TreeView.data.root; ;
+
+                var id = m_DataContainer.GetAutoID();
+                var newItem = new GMCategoryItem(id, 0, item, "New Item");
+                newItem.SetConfigSource(m_WindowConfigSource);
+
+                item.AddChild(newItem);
+                m_TreeView.SetSelection(new int[] { newItem.id }, true);
+                m_TreeView.data.RefreshData();
+
+                m_WindowConfigSource.SetConfigDirty();
+            });
+            g.ShowAsContext();
+        }
+
+        private void TreeViewSelectionChanged(int[] ids)
+        {
+            if (ids == null || ids.Length == 0)
+            {
+                m_GraphView.currentGraph = null;
+                return;
+            }
+
+            foreach (var id in ids)
+            {
+                var item = m_TreeView.FindItem(id) as GMCategoryItem;
+                if (item != null && item.graph == m_GraphView.currentGraph)
+                {
+                    return;
+                }
+            }
+
+            var firstItem = m_TreeView.FindItem(ids[0]) as GMCategoryItem;
+            if (firstItem == null)
+            {
+                m_GraphView.currentGraph = null;
+            }
+            else
+            {
+                m_GraphView.currentGraph = firstItem.graph;
+            }          
+        }
+
+        private void OnTextChangedAction(string searchText)
+        {
+            if (m_TreeView != null && m_TreeView.data != null)
+            {
+                m_TreeView.state.searchString = searchText;
+                m_TreeView.data.OnSearchChanged();
+            }
         }
     }
 }

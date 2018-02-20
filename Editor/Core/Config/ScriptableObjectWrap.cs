@@ -19,6 +19,9 @@ namespace EUTK
 
         public PropertyInfo FindProperty(string propertyName)
         {
+            if (string.IsNullOrEmpty(propertyName))
+                return null;
+
             if (m_PropsMap == null)
                 m_PropsMap = new Dictionary<string, PropertyInfo>();
 
@@ -26,8 +29,6 @@ namespace EUTK
                 return m_PropsMap[propertyName];
 
             var property = GetType().GetProperty(propertyName, BindingFlags.Instance | BindingFlags.Public);
-            if (property == null)
-                throw new NullReferenceException("property");
             m_PropsMap[propertyName] = property;
             return property;
         }

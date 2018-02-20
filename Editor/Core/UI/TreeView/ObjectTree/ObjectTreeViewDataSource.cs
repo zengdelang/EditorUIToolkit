@@ -4,6 +4,13 @@
     {
         private TreeItemContainer m_DataContainer;
         private EditorWindowConfigSource m_ConfigSource;
+        private bool m_CanBeParent = true;
+
+        public bool canBeParent
+        {
+            get { return m_CanBeParent; }
+            set { m_CanBeParent = value; }
+        }
 
         public TreeItemContainer DataContainer
         {
@@ -42,20 +49,20 @@
             return item.hasChildren && (item != this.m_RootItem || this.rootIsCollapsable);
         }
 
-        /*public override bool CanBeParent(TreeViewItem item)
+        public override bool CanBeParent(TreeViewItem item)
         {
-            return !(item is SearchFilterTreeItem) || SavedSearchFilters.AllowsHierarchy();
-        }*/
+            return canBeParent;
+        }
 
         public bool IsVisibleRootNode(TreeViewItem item)
         {
-            return item.parent != null && item.parent.parent == null;
+            return item.parent == null;
         }
 
         public override bool IsRenamingItemAllowed(TreeViewItem item)
         {
             if (IsVisibleRootNode(item))
-                return false;
+                 return false;
             return base.IsRenamingItemAllowed(item);
         }
 
@@ -65,6 +72,7 @@
             SetExpanded(m_RootItem, true);
 
             m_RootItem.SetConfigSource(ConfigSource);
+
             if (m_RootItem.children == null)
             {
                 m_RootItem.children = m_DataContainer.ItemList;

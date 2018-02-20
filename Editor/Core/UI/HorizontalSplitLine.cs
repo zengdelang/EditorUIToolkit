@@ -6,6 +6,8 @@ namespace EUTK
 {
     public class HorizontalSplitLine
     {
+        public static readonly string ConfigKey = "splitLineX";
+
         protected static Vector2 s_MouseDeltaReaderLastPos;
 
         protected EditorWindowConfigSource m_ConfigSource;
@@ -26,7 +28,8 @@ namespace EUTK
                 m_PositionX = value;
                 if (m_ConfigSource != null)
                 {
-                    m_ConfigSource.SetValue("SplitLineX", m_PositionX);
+                    if (m_ConfigSource.FindProperty(ConfigKey) != null)
+                        m_ConfigSource.SetValue(ConfigKey, m_PositionX);
                     m_ConfigSource.SetConfigDirty();
                 }
             }
@@ -39,9 +42,12 @@ namespace EUTK
                 m_ConfigSource = value;
                 if (m_ConfigSource != null)
                 {
-                    var x = m_ConfigSource.GetValue<float>("SplitLineX");
-                    if (x >= m_MinXPos)
-                        m_PositionX = x;
+                    if (m_ConfigSource.FindProperty(ConfigKey) != null)
+                    {
+                        var x = m_ConfigSource.GetValue<float>(ConfigKey);
+                        if (x >= m_MinXPos)
+                            m_PositionX = x;
+                    }
                 }
             }
         }

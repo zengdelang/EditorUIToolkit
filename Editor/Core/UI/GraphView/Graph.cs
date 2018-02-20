@@ -28,10 +28,6 @@ namespace EUTK
 
         [SerializeField] protected List<NodeGroup> m_NodeGroups;
 
-        [NonSerialized] protected Rect inspectorRect = new Rect(15, 55, 0, 0);
-
-        [NonSerialized] protected Vector2 nodeInspectorScrollPos;
-
         [NonSerialized] public int keyboardControl;
         [NonSerialized] public Node[] CopiedNodes;
         [NonSerialized] public EditorWindowConfigSource windowConfig;
@@ -41,7 +37,18 @@ namespace EUTK
         [NonSerialized] public bool isDraggingPort;
         [NonSerialized] public int dragDropMisses;
 
-        public Node.GUIPort clickedPort { get; set; }
+        [JsonIgnore] [SerializeField] protected List<int> m_MultiSelection = new List<int>();
+
+        protected virtual List<int> multiSelection
+        {
+            get { return m_MultiSelection; }
+            set { m_MultiSelection = value != null ? value : new List<int>(); }
+        }
+
+        public Node.GUIPort clickedPort
+        {
+            get; set;
+        }
 
         public List<NodeGroup> nodeGroups
         {
@@ -189,9 +196,10 @@ namespace EUTK
             }
         }
 
-        public virtual void ShowGraphControls(Event e, Vector2 canvasMousePos)
+        public virtual void ShowGraphControls(Event e, Vector2 canvasMousePos, bool canHandleEvent)
         {
-            HandleEvents(e, canvasMousePos);
+            if(canHandleEvent)
+                HandleEvents(e, canvasMousePos);
 
             if (PostGUI != null)
             {
@@ -343,13 +351,6 @@ namespace EUTK
 
         protected virtual void HandleEvents(Event e, Vector2 canvasMousePos)
         {
-            var inspectorWithScrollbar = new Rect(inspectorRect.x, inspectorRect.y, inspectorRect.width + 14,
-                inspectorRect.height);
-            if (inspectorWithScrollbar.Contains(e.mousePosition))
-            {
-                return;
-            }
-
             if (e.type == EventType.KeyUp && GUIUtility.keyboardControl == keyboardControl)
             {
                 if (e.keyCode == KeyCode.Delete || e.keyCode == KeyCode.Backspace)
@@ -533,14 +534,6 @@ namespace EUTK
 
             SetConfigDirty();
             return newNodes;
-        }
-
-        [JsonIgnore] [SerializeField] protected List<int> m_MultiSelection = new List<int>();
-
-        protected virtual List<int> multiSelection
-        {
-            get { return m_MultiSelection; }
-            set { m_MultiSelection = value != null ? value : new List<int>(); }
         }
 
         public virtual bool IsSelected(int id)

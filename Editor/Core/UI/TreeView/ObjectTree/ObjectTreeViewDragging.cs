@@ -87,14 +87,19 @@ namespace EUTK
                         insertIndex = parentItem.children.IndexOf(insertAfterItem);
                     }
 
-                    if ((insertAfterItem == parentItem && dropPos != DropPosition.Below) ||
-                        insertIndex >= parentItem.children.Count)
-                    {
-                        parentItem.AddChild(item);
-                    }
+                    if(insertAfterItem == null && parentItem == null)
+                        m_TreeView.data.root.AddChild(item);
                     else
                     {
-                        parentItem.AddChildAtIndex(item, insertIndex + 1);
+                        if ((insertAfterItem == parentItem && dropPos != DropPosition.Below) ||
+                            insertIndex >= parentItem.children.Count)
+                        {
+                            parentItem.AddChild(item);
+                        }
+                        else
+                        {
+                            parentItem.AddChildAtIndex(item, insertIndex + 1);
+                        }
                     }
                 }
             }

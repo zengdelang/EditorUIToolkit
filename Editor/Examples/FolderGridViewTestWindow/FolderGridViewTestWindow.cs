@@ -29,7 +29,7 @@ namespace EUTK
             m_WindowConfigSource = FileConfigSource.CreateFileConfigSource("ViewConfig/TestWindow/config5.txt", true, typeof(FolderGridViewTestWindowSetting1));
             //m_WindowConfigSource = AssetConfigSource.CreateAssetConfigSource("config", true, typeof(FolderGridViewTestWindowSetting2)); 
 
-            m_FolderGridViewGroup = new FolderGridViewGroup(m_LayoutGroupMgr, m_WindowConfigSource, "TreeViewStateConfig", "TreeViewDataContainer", null, DragID);
+            m_FolderGridViewGroup = new FolderGridViewGroup(m_LayoutGroupMgr, m_WindowConfigSource, "TreeViewStateConfig", "TreeViewDataContainer", DragID);
             m_FolderGridViewGroup.Active = false;
 
             var gridView = m_FolderGridViewGroup.GetGridView();

@@ -52,6 +52,11 @@ namespace EUTK
             get; set;
         }
 
+        public Action OnGUIAction
+        {
+            get; set;
+        }
+
         public string SearchText
         {
             get { return m_SearchFieldText; }
@@ -88,6 +93,9 @@ namespace EUTK
 
             GUILayout.BeginArea(new Rect(0.0f, 0.0f, rect.width, EditorStyles.toolbar.fixedHeight));
             GUILayout.BeginHorizontal(EditorStyles.toolbar);
+
+            if (OnGUIAction != null)
+                OnGUIAction();
 
             GUILayout.FlexibleSpace();
             if (m_ShowSearchField)

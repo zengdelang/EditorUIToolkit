@@ -60,7 +60,7 @@ namespace EUTK
             }
         }
 
-        public FolderGridViewGroup(ViewGroupManager owner, EditorWindowConfigSource configSource, string stateConfigName, string containerConfigName, TreeViewState state = null, string dragId = null) : base(owner)
+        public FolderGridViewGroup(ViewGroupManager owner, EditorWindowConfigSource configSource, string stateConfigName, string containerConfigName, string dragId = null) : base(owner)
         {
             m_ConfigSource = configSource;
 

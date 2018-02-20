@@ -1,10 +1,13 @@
-﻿using UnityEditor;
+﻿using System;
+using UnityEditor;
 using UnityEngine;
 
 namespace EUTK
 {
     public class ObjectTreeViewGUI : TreeViewGUI
     {
+        public Action<TreeViewItem, string> RenameEndAction { get; set; }
+
         public ObjectTreeViewGUI(TreeView treeView) : base(treeView)
         {
 
@@ -120,6 +123,11 @@ namespace EUTK
             if (treeViewItem != null && treeViewItem.displayName != name)
             {
                 treeViewItem.displayName = name;
+            }
+
+            if (RenameEndAction != null)
+            {
+                RenameEndAction(treeViewItem, name);
             }
         }
     }

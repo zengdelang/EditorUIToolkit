@@ -12,6 +12,7 @@ namespace EUTK
         public static readonly Vector2 virtualCenterOffset = new Vector2(-5000, -5000);
 
         protected EditorWindowConfigSource m_WindowConfig;
+        protected Graph   m_Graph;
         protected Rect    m_ClientAreaRect;
         protected Rect    m_ViewRect;
         protected bool    m_FullDrawPass = true;
@@ -27,7 +28,16 @@ namespace EUTK
         protected Node[]  m_TempGroupNodes;
         protected NodeGroup[] m_TempNestedGroups;
 
-        public Graph currentGraph;
+        public Graph currentGraph
+        {
+            get { return m_Graph; }
+            set
+            {
+                m_Graph = value;
+                if(m_Graph != null)
+                    m_Graph.windowConfig = m_WindowConfig;
+            }
+        }
 
         protected Vector2 pan
         {
@@ -75,6 +85,11 @@ namespace EUTK
         public GraphView(ViewGroupManager owner, EditorWindowConfigSource windowConfig) : base(owner)
         {
             m_WindowConfig = windowConfig;
+            Undo.undoRedoPerformed += UndoRedoPerformedAction;
+        }
+
+        public GraphView(ViewGroupManager owner) : base(owner)
+        {
             Undo.undoRedoPerformed += UndoRedoPerformedAction;
         }
 
@@ -160,8 +175,6 @@ namespace EUTK
         {        
             base.OnGUI(rect);
 
-            rect.y += 18;
-            rect.height -= 18;
             m_ClientAreaRect = rect;
 
             if (Event.current.type == EventType.Repaint)
@@ -175,7 +188,7 @@ namespace EUTK
             GUI.color = Color.white;
             GUI.backgroundColor = Color.white;
 
-            HandleEvents(keyboardControlID);
+            var canHandleEvent = HandleEvents(keyboardControlID);
 
             Matrix4x4 oldMatrix;
 
@@ -218,7 +231,7 @@ namespace EUTK
             EndZoomArea(oldMatrix);
 
             if (currentGraph != null)
-                currentGraph.ShowGraphControls(Event.current, mousePosInCanvas);
+                currentGraph.ShowGraphControls(Event.current, mousePosInCanvas, canHandleEvent);
 
             GUI.color = Color.white;
             GUI.backgroundColor = Color.white;
@@ -228,7 +241,6 @@ namespace EUTK
         {
             var scaledX = (container.width - offset.x) / zoomFactor;
             var scaledY = (container.height - offset.y) / zoomFactor;
-
             for (var i = 0 - (int)offset.x; i < scaledX; i++)
             {
                 if (i % gridSize == 0)
@@ -271,15 +283,14 @@ namespace EUTK
             GUI.BeginGroup(zoomRecoveryRect, GUIStyle.none);
         }
 
-        protected void HandleEvents(int keyboardControlID)
+        protected bool HandleEvents(int keyboardControlID)
         {
             Event e = Event.current;
             var rect = m_ClientAreaRect;
             rect.y -= unityTabHeight;
             if (!rect.Contains(e.mousePosition))
             {
-
-                return;
+                return false;
             }
 
             if (Event.current.type == EventType.MouseDown)
@@ -318,10 +329,16 @@ namespace EUTK
                 m_SmoothZoomFactor = null;
                 e.Use();
             }
+
+            return true;
         }
  
         protected void DoCanvasRectSelection(Rect container, Event e)
         {
+            if (currentGraph == null)
+                return;
+
+
             if (currentGraph.graphConfig.allowClick &&  e.type == EventType.MouseDown && e.button == 0 && !e.alt && !e.shift && m_ClientAreaRect.Contains(CanvasSpaceToViewSpace(e.mousePosition)))
             {
                 currentGraph.ClearSelection();
