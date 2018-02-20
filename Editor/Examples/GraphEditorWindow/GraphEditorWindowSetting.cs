@@ -6,15 +6,8 @@ namespace EUTK
     public class GraphEditorWindowSetting : FileConfigSource
     {
         [JsonMember] protected string m_SearchText;
-        [JsonMember] protected Graph m_Graph;
         [JsonMember] protected float m_SplitLineX;
         [JsonMember] protected bool m_IsMainButtonOn;
-
-        public Graph graph
-        {
-            get { return m_Graph; }
-            set { m_Graph = value; }
-        }
 
         public string searchText
         {

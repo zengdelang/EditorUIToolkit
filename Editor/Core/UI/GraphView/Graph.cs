@@ -42,7 +42,7 @@ namespace EUTK
         protected virtual List<int> multiSelection
         {
             get { return m_MultiSelection; }
-            set { m_MultiSelection = value != null ? value : new List<int>(); }
+            set { m_MultiSelection = (value != null) ? value : new List<int>(); }
         }
 
         public Node.GUIPort clickedPort
@@ -388,18 +388,20 @@ namespace EUTK
 
                 if (e.keyCode == KeyCode.D && e.control)
                 {
-                    if (multiSelection != null && multiSelection.Count > 0)
+                    if (multiSelection != null && multiSelection.Count > 1)
                     {
                         var idList = new List<int>();
                         CopyNodesToGraph(GetAllSelectedNodes(), idList);
                         multiSelection = idList;
                         ShowSelectionInspectorGUI();
+                        return;
                     }
 
                     if (selectedNode != null)
                     {
-                        multiSelection.Clear();
-                        multiSelection.Add(selectedNode.Duplicate(this).id);
+                        var node = selectedNode.Duplicate(this);
+                        multiSelection.Clear();        
+                        multiSelection.Add(node.id);
                         ShowSelectionInspectorGUI();
                     }
 

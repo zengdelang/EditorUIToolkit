@@ -261,6 +261,12 @@ namespace EUTK
             ShowNodeContents();
             HandleContextMenu(e);
             HandleNodePosition(e);
+
+            if (GUI.changed)
+            {
+                nodeRect = new Rect(nodePosition.x, nodePosition.y, m_MinSize.x, m_MinSize.y);
+                graph.SetConfigDirty();
+            }
         }
 
         protected virtual void ShowHeader()

@@ -80,10 +80,10 @@ namespace EUTK
     public class Node14 : Node1
     {
         [SerializeField]
-        protected string haha11;
+        protected string haha11 = "";
 
 
-        sealed public override int maxOutConnections { get { return 5; } }
+        sealed public override int maxOutConnections { get { return 0; } }
 
 
 
@@ -91,11 +91,21 @@ namespace EUTK
         {
             get { return -1; }
         }
+
+        protected override void OnNodeGUI()
+        {
+            base.OnNodeGUI();
+            haha11=EditorGUILayout.TextArea(haha11);
+            if (GUILayout.Button("执行"))
+            {
+                EditorWindow.focusedWindow.ShowNotification(new GUIContent("11322"));
+            }
+        }
     }
 
     public class Connection1 : Connection
     {
-
+    
     }
 
     public class GMCategoryItem : TreeViewItem

@@ -149,7 +149,7 @@ namespace EUTK
                 case EventType.ValidateCommand:
                     var flag = type == EventType.ExecuteCommand;
                     var selection = m_TreeView.GetSelection();
-                    if (selection.Length == 0)
+                    if (selection.Length == 0 || !m_TreeView.HasFocus())
                         return;
                     if (Event.current.commandName == "Delete" || Event.current.commandName == "SoftDelete")
                     {
