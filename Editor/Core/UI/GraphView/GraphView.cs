@@ -239,6 +239,7 @@ namespace EUTK
 
         protected void DrawGrid(Rect container, Vector2 offset, float zoomFactor)
         {
+            Handles.matrix = Matrix4x4.identity;
             var scaledX = (container.width - offset.x) / zoomFactor;
             var scaledY = (container.height - offset.y) / zoomFactor;
             for (var i = 0 - (int)offset.x; i < scaledX; i++)

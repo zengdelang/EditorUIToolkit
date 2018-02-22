@@ -1,15 +1,18 @@
 fileFormatVersion: 2
-guid: cca32491caa61154fbcc20bad700c46d
-timeCreated: 1518882330
+guid: 0c013b26c51caa747a47c80de47472f5
+timeCreated: 1519318114
 licenseType: Free
 TextureImporter:
-  fileIDToRecycleName: {}
+  fileIDToRecycleName:
+    21300000: "QQ\u6D4F\u89C8\u5668\u622A\u56FE20180221210704_0"
+    21300002: "QQ\u6D4F\u89C8\u5668\u622A\u56FE20180221210704_1"
+    21300004: test_0
   externalObjects: {}
   serializedVersion: 4
   mipmaps:
     mipMapMode: 0
     enableMipMap: 0
-    sRGBTexture: 0
+    sRGBTexture: 1
     linearTexture: 0
     fadeOut: 0
     borderMipMap: 0
@@ -32,7 +35,7 @@ TextureImporter:
   textureSettings:
     serializedVersion: 2
     filterMode: -1
-    aniso: 1
+    aniso: -1
     mipBias: -1
     wrapU: 1
     wrapV: 1
@@ -40,17 +43,17 @@ TextureImporter:
   nPOTScale: 0
   lightmap: 0
   compressionQuality: 50
-  spriteMode: 1
+  spriteMode: 2
   spriteExtrude: 1
   spriteMeshType: 1
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
-  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteBorder: {x: 319, y: 448, z: 0, w: 0}
   spritePixelsToUnits: 100
   alphaUsage: 1
   alphaIsTransparency: 1
   spriteTessellationDetail: -1
-  textureType: 2
+  textureType: 8
   textureShape: 1
   maxTextureSizeSet: 0
   compressionQualitySet: 0
@@ -88,7 +91,43 @@ TextureImporter:
     androidETC2FallbackOverride: 0
   spriteSheet:
     serializedVersion: 2
-    sprites: []
+    sprites:
+    - serializedVersion: 2
+      name: "QQ\u6D4F\u89C8\u5668\u622A\u56FE20180221210704_0"
+      rect:
+        serializedVersion: 2
+        x: 317
+        y: 267
+        width: 343
+        height: 229
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -204.95076, y: 111.67413}
+        - {x: -454, y: -305}
+        - {x: 454, y: -305}
+        - {x: 454, y: 305}
+      physicsShape:
+      - - {x: -119.65994, y: 102.576416}
+        - {x: -454, y: -305}
+        - {x: 149.22748, y: -17.285583}
+        - {x: 454, y: 305}
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: test_0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 396
+        width: 110
+        height: 64
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
     outline: []
     physicsShape: []
   spritePackingTag: 
