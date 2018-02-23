@@ -6,13 +6,14 @@ using UnityEngine;
 namespace EUTK
 {
     [JsonClassType]
+    [JsonOptIn]
     [Serializable]
     public class TreeItemContainer : ScriptableObject
     {
-        [SerializeField] public List<TreeViewItem> ItemList = new List<TreeViewItem>();
-        [SerializeField] protected int autoId;
+        [JsonMember] [SerializeField] public List<TreeViewItem> ItemList = new List<TreeViewItem>();
+        [JsonMember] [SerializeField] protected int autoId;
 
-        public EditorWindowConfigSource ConfigSource;
+        [JsonIgnore] [NonSerialized] public EditorWindowConfigSource ConfigSource;
 
         public int GetAutoID()
         {

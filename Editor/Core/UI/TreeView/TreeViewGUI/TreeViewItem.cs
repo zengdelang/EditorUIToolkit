@@ -7,18 +7,19 @@ namespace EUTK
 {
     [JsonClassType]
     [JsonOptIn]
+    [Serializable]
     public class TreeViewItem : IComparable<TreeViewItem>
     {
-        [JsonIgnore] protected EditorWindowConfigSource m_ConfigSource;
+        [JsonIgnore] [NonSerialized] protected EditorWindowConfigSource m_ConfigSource;
 
-        [SerializeField] protected int m_ID;
-        [SerializeField] protected int m_Depth;
-        [SerializeField] protected string m_DisplayName;
-        [SerializeField] protected List<TreeViewItem> m_Children;
+        [JsonMember] [SerializeField] protected int m_ID;
+        [JsonMember] [SerializeField] protected int m_Depth;
+        [JsonMember] [SerializeField] protected string m_DisplayName;
+        [JsonMember] [NonSerialized] protected List<TreeViewItem> m_Children;
 
-        [JsonIgnore] protected TreeViewItem m_Parent;
-        [JsonIgnore] protected Texture2D m_Icon;
-        [JsonIgnore] protected object m_UserData;
+        [JsonIgnore] [NonSerialized] protected TreeViewItem m_Parent;
+        [JsonIgnore] [NonSerialized] protected Texture2D m_Icon;
+        [JsonIgnore] [NonSerialized] protected object m_UserData;
 
         public TreeViewItem()
         {

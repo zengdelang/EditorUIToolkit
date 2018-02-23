@@ -7,12 +7,13 @@ using UnityEngine;
 namespace EUTK
 {
     [JsonClassType]
+    [JsonOptIn]
     [Serializable]
     public class FolderTreeViewItem : TreeViewItem
     {
-        [SerializeField] protected bool m_IsFolder;
-        [SerializeField] public List<FolderTreeViewItem> FileList = new List<FolderTreeViewItem>();
-        [SerializeField] protected string m_Path;
+        [JsonMember] [SerializeField] protected bool m_IsFolder;
+        [JsonMember] [NonSerialized] public List<FolderTreeViewItem> FileList = new List<FolderTreeViewItem>();
+        [JsonMember] [SerializeField] protected string m_Path;
 
         public bool IsFolder
         {
@@ -20,7 +21,7 @@ namespace EUTK
             {
                 return m_IsFolder;
             }
-            set
+            set 
             {
                 m_IsFolder = value;
                 SetDirty();

@@ -1,16 +1,14 @@
-﻿using UnityEditor;
+﻿using JsonFx.U3DEditor;
+using UnityEditor;
 using UnityEngine;
 
 namespace EUTK
 {
     public class FolderGridItem : GridItem
     {
-        [SerializeField]
-        public string Path;
-        [SerializeField]
-        public bool IsFolder;
-        [SerializeField]
-        public int ParentId;
+        [JsonMember] [SerializeField] public string Path;
+        [JsonMember] [SerializeField] public bool IsFolder;
+        [JsonMember] [SerializeField] public int ParentId;
 
         public override Texture Texture
         {

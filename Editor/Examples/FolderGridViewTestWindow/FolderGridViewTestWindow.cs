@@ -26,10 +26,10 @@ namespace EUTK
 
         protected override void InitData()
         {
-            m_WindowConfigSource = FileConfigSource.CreateFileConfigSource("ViewConfig/TestWindow/config5.txt", true, typeof(FolderGridViewTestWindowSetting1));
+            WindowConfigSource = FileConfigSource.CreateFileConfigSource("ViewConfig/TestWindow/config5.txt", true, typeof(FolderGridViewTestWindowSetting1));
             //m_WindowConfigSource = AssetConfigSource.CreateAssetConfigSource("config", true, typeof(FolderGridViewTestWindowSetting2)); 
 
-            m_FolderGridViewGroup = new FolderGridViewGroup(m_LayoutGroupMgr, m_WindowConfigSource, "TreeViewStateConfig", "TreeViewDataContainer", DragID);
+            m_FolderGridViewGroup = new FolderGridViewGroup(m_LayoutGroupMgr, WindowConfigSource, "TreeViewStateConfig", "TreeViewDataContainer", DragID);
             m_FolderGridViewGroup.Active = false;
 
             var gridView = m_FolderGridViewGroup.GetGridView();
@@ -77,7 +77,8 @@ namespace EUTK
                             m_TreeView.state.scrollPos = Vector2.zero;
                             if (m_TreeView.data != null)
                                 m_TreeView.data.ReloadData();
-                            m_WindowConfigSource.SetConfigDirty();
+                            WindowConfigSource.SetConfigDirty();
+                            WindowConfigSource.SaveConfigLazily();
                         }
                     }
                 }
@@ -349,7 +350,7 @@ namespace EUTK
                 child.id = folderItem.Id;
                 child.displayName = di.Name;
                 child.parent = parentItem;
-                child.SetConfigSource(m_WindowConfigSource);
+                child.SetConfigSource(WindowConfigSource);
                 parentItem.AddChild(child);
             };
 
@@ -396,7 +397,7 @@ namespace EUTK
             child.id = folderItem.Id;
             child.displayName = folderItem.DisplayName;
             child.parent = parentItem;
-            child.SetConfigSource(m_WindowConfigSource);
+            child.SetConfigSource(WindowConfigSource);
 
             if (parentItem.FileList == null)
                 parentItem.FileList = new List<FolderTreeViewItem>();

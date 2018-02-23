@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using JsonFx.U3DEditor;
 using UnityEditor;
 using UnityEngine;
 
@@ -22,22 +23,13 @@ namespace EUTK
     [Description("Works like a normal Selector, but when a child node returns Success, that child will be moved to the end.\nAs a result, previously Failed children will always be checked first and recently Successful children last")]
     public class Node11 : Node1
     {
-        [SerializeField]
-        protected string haha;
-
-        [SerializeField]
-        public Dictionary<string, string> ss;
-
-        [SerializeField] public List<string> dd;
+        [JsonMember] [SerializeField] protected string haha;
+        [JsonMember] [SerializeField] public Dictionary<string, string> ss;
+        [JsonMember] [SerializeField] public List<string> dd;
 
         public string dsew;
-
-
         public int xxx;
-
-        sealed public override int maxOutConnections { get { return -1; } }
-
-
+        public sealed override int maxOutConnections { get { return -1; } }
 
         public override int maxInConnections
         {
@@ -47,13 +39,12 @@ namespace EUTK
 
     public class Node12 : Node1
     {
-        [SerializeField]
-        protected string haha11;
+        [JsonMember] [SerializeField] protected string haha11;
 
-
-        sealed public override int maxOutConnections { get { return 5; } }
-
-
+        public sealed override int maxOutConnections
+        {
+            get { return 5; }
+        }
 
         public override int maxInConnections
         {
@@ -63,13 +54,12 @@ namespace EUTK
 
     public class Node13 : Node1
     {
-        [SerializeField]
-        protected string haha11;
+        [JsonMember] [SerializeField] protected string haha11;
 
-
-        sealed public override int maxOutConnections { get { return 5; } }
-
-
+        public sealed override int maxOutConnections
+        {
+            get { return 5; }
+        }
 
         public override int maxInConnections
         {
@@ -79,23 +69,22 @@ namespace EUTK
 
     public class Node14 : Node1
     {
-        [SerializeField]
-        public string haha11 = "";
+        [JsonMember] [SerializeField] public string haha11 = "";
 
-
-        sealed public override int maxOutConnections { get { return 0; } }
-
-
+        public sealed override int maxOutConnections
+        {
+            get { return 0; }
+        }
 
         public override int maxInConnections
         {
             get { return -1; }
         }
 
-        protected override void OnNodeGUI() 
+        protected override void OnNodeGUI()
         {
             base.OnNodeGUI();
-            haha11=EditorGUILayout.TextArea(haha11);
+            haha11 = EditorGUILayout.TextArea(haha11);
             if (GUILayout.Button("执行"))
             {
                 EditorWindow.focusedWindow.ShowNotification(new GUIContent("11322"));
@@ -110,7 +99,7 @@ namespace EUTK
 
     public class GMCategoryItem : TreeViewItem
     {
-        [SerializeField] public Graph graph;
+        [JsonMember] [SerializeField] public Graph graph;
 
         public GMCategoryItem(int id, int depth, TreeViewItem parent, string displayName) : base(id, depth, parent, displayName)
         {
@@ -138,9 +127,9 @@ namespace EUTK
 
         protected override void InitData()
         {
-            m_WindowConfigSource = FileConfigSource.CreateFileConfigSource("ViewConfig/TestWindow/config6.txt", true, typeof(GraphEditorWindowSetting));
+            WindowConfigSource = FileConfigSource.CreateFileConfigSource("ViewConfig/TestWindow/config6.txt", true, typeof(GraphEditorWindowSetting));
 
-            m_GraphViewGroup = new GraphViewGroup(m_LayoutGroupMgr, m_WindowConfigSource, "TreeViewStateConfig", "TreeViewDataContainer");
+            m_GraphViewGroup = new GraphViewGroup(m_LayoutGroupMgr, WindowConfigSource, "TreeViewStateConfig", "TreeViewDataContainer");
             m_GraphView = m_GraphViewGroup.graphView;
 
             m_GraphViewGroup.showMainButton = true;
@@ -188,14 +177,14 @@ namespace EUTK
 
                 var id = m_DataContainer.GetAutoID();
                 var newItem = new GMCategoryItem(id, 0, item, "New Item");
-                newItem.SetConfigSource(m_WindowConfigSource);
+                newItem.SetConfigSource(WindowConfigSource);
 
                 item.AddChild(newItem);
                 m_TreeView.SetSelection(new int[] { newItem.id }, true);
                 m_TreeView.data.RefreshData();
 
                 TreeViewSelectionChanged(new int[] { newItem.id });
-                m_WindowConfigSource.SetConfigDirty();
+                WindowConfigSource.SetConfigDirty();
             });
             g.ShowAsContext();
         }

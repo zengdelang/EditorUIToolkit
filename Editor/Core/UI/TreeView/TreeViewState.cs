@@ -9,26 +9,17 @@ namespace EUTK
     [JsonOptIn]
     public class TreeViewState
     {
-        [JsonIgnore]
-        private EditorWindowConfigSource m_ConfigSource;
+        [JsonIgnore] [NonSerialized] private EditorWindowConfigSource m_ConfigSource;
 
-        [SerializeField]
-        private List<int> m_SelectedIDs = new List<int>();
-        [SerializeField]
-        private List<int> m_ExpandedIDs = new List<int>();
+        [JsonMember] [SerializeField] private List<int> m_SelectedIDs = new List<int>();
+        [JsonMember] [SerializeField] private List<int> m_ExpandedIDs = new List<int>();
 
-        [JsonIgnore]
-        private RenameOverlay m_RenameOverlay = new RenameOverlay();
+        [JsonIgnore] [NonSerialized] private RenameOverlay m_RenameOverlay = new RenameOverlay();
 
-        [SerializeField]
-        private Vector2 m_ScrollPos;
-
-        [SerializeField]
-        private int m_LastClickedID = Int32.MinValue;
-        [SerializeField]
-        private string m_SearchString;
-        [SerializeField]
-        private float[] m_ColumnWidths;
+        [JsonMember] [SerializeField] private Vector2 m_ScrollPos;
+        [JsonMember] [SerializeField] private int m_LastClickedID = Int32.MinValue;
+        [JsonMember] [SerializeField] private string m_SearchString;
+        [JsonMember] [SerializeField] private float[] m_ColumnWidths;
 
         public void SetConfigSource(EditorWindowConfigSource config)
         {
@@ -53,8 +44,11 @@ namespace EUTK
             get { return m_ScrollPos; }
             set
             {
-                m_ScrollPos = value;
-                SetDirty();
+                if (m_ScrollPos != value)
+                {
+                    m_ScrollPos = value;
+                    SetDirty();
+                }               
             }
         }
 
@@ -63,8 +57,11 @@ namespace EUTK
             get { return m_ScrollPos.y; }
             set
             {
-                m_ScrollPos.y = value;
-                SetDirty();
+                if (m_ScrollPos.y != value)
+                {
+                    m_ScrollPos.y = value;
+                    SetDirty();
+                }              
             }
         }
 

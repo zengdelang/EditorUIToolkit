@@ -7,16 +7,16 @@ using UnityEngine;
 namespace EUTK
 {
     [JsonClassType]
+    [JsonOptIn]
     [Serializable]
     public class FolderTreeItemContainer : ScriptableObject
     {
-        [SerializeField] public FolderTreeViewItem RootItem;
-        [SerializeField] protected int autoId;
-        [SerializeField] protected string rootFolderPath;
+        [JsonMember] [SerializeField] public FolderTreeViewItem RootItem;
+        [JsonMember] [SerializeField] protected int autoId;
+        [JsonMember] [SerializeField] protected string rootFolderPath;
 
-        public EditorWindowConfigSource ConfigSource;
-
-        public string[] ExtNames = { };
+        [JsonIgnore] [NonSerialized] public EditorWindowConfigSource ConfigSource;
+        [JsonIgnore] [NonSerialized] public string[] ExtNames = { };
 
         public Action UpdateItemChangedAction { get; set; }
 

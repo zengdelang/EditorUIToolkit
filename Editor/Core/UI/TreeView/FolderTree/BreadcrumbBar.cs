@@ -7,11 +7,7 @@ namespace EUTK
 {
     public class BreadcrumbBar : View
     {
-        public GUIStyle foldout = "AC RightArrow";
-        public GUIStyle topBarBg = "ProjectBrowserTopBarBg";
-        public GUIStyle exposablePopup = "ExposablePopupMenu";
-        public GUIContent SearchIn = new GUIContent("Search:");
-
+        private Styles m_Styles;
         private List<KeyValuePair<GUIContent, int>> m_BreadCrumbs = new List<KeyValuePair<GUIContent, int>>();
         protected int m_KeyboardControlID;
         private float m_SearchAreaMenuOffset = -1f;
@@ -20,7 +16,7 @@ namespace EUTK
         public int KeyboardControlID
         {
             set { m_KeyboardControlID = value; }
-        }
+        } 
 
         public TreeView FolderTreeView { get; set; }
 
@@ -45,6 +41,10 @@ namespace EUTK
         public override void OnGUI(Rect rect)
         {
             base.OnGUI(rect);
+
+            if(m_Styles == null)
+                m_Styles = new Styles();
+
             if (IsSearching)
                 SearchAreaBar(rect);
             else
@@ -53,14 +53,14 @@ namespace EUTK
 
         private void SearchAreaBar(Rect rect)
         {
-            GUI.Label(rect, GUIContent.none, topBarBg);
+            GUI.Label(rect, GUIContent.none, m_Styles.topBarBg);
             rect.x += 5f;
             rect.width -= 10f;
             ++rect.y;
             GUIStyle boldLabel = EditorStyles.boldLabel;
-            GUI.Label(rect, SearchIn, boldLabel);
+            GUI.Label(rect, m_Styles.SearchIn, boldLabel);
             if (m_SearchAreaMenuOffset < 0)
-                m_SearchAreaMenuOffset = boldLabel.CalcSize(SearchIn).x;
+                m_SearchAreaMenuOffset = boldLabel.CalcSize(m_Styles.SearchIn).x;
             rect.x += m_SearchAreaMenuOffset + 7f;
             rect.width -= m_SearchAreaMenuOffset + 7f;
             rect.width = this.m_SearchAreaMenu.OnGUI(rect);
@@ -75,7 +75,7 @@ namespace EUTK
                 Repaint();
             }
 
-            GUI.Label(rect, GUIContent.none, topBarBg);
+            GUI.Label(rect, GUIContent.none, m_Styles.topBarBg);
 
             Rect listHeaderRect = rect;
             ++listHeaderRect.y;
@@ -99,7 +99,7 @@ namespace EUTK
                     if (!flag || LastFolderHasSubFolders)
                     {
                         Rect arrowRect = new Rect(listHeaderRect.x, listHeaderRect.y + 2f, 13f, 13f);
-                        if (EditorGUI.DropdownButton(arrowRect, GUIContent.none, FocusType.Passive, foldout))
+                        if (EditorGUI.DropdownButton(arrowRect, GUIContent.none, FocusType.Passive, m_Styles.foldout))
                         {
                             int childItemId = Int32.MinValue;
                             if (!flag)
@@ -124,8 +124,23 @@ namespace EUTK
             items.Add(new ExposablePopupMenu.ItemData(firstItemContent, guiStyle, true, true, firsteItemId));
             //items.Add(new ExposablePopupMenu.ItemData(secondItemContent, guiStyle, false,  true, secondItemId));
 
-            ExposablePopupMenu.PopupButtonData popupButtonData = new ExposablePopupMenu.PopupButtonData(firstItemContent, exposablePopup);
+            ExposablePopupMenu.PopupButtonData popupButtonData = new ExposablePopupMenu.PopupButtonData(firstItemContent, m_Styles.exposablePopup);
             m_SearchAreaMenu.Init(items, 10f, 450f, popupButtonData, (itemData) => { });
+        }
+
+
+        protected class Styles
+        {
+            public readonly GUIStyle dragdot = "U2D.dragDot";
+            public readonly GUIStyle foldout = "AC RightArrow";
+            public readonly GUIStyle topBarBg = "ProjectBrowserTopBarBg";
+            public readonly GUIStyle exposablePopup = "ExposablePopupMenu";
+            public readonly GUIContent SearchIn = new GUIContent("Search:");
+
+            public Styles()
+            {
+
+            }
         }
     }
 

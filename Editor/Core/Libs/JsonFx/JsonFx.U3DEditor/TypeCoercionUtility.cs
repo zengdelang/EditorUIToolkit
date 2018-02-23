@@ -291,8 +291,7 @@ namespace JsonFx.U3DEditor
 				{
 					FieldInfo field = fields[j];
 
-					if (field.IsStatic || (!field.IsPublic && (field.GetCustomAttributes (typeof(JsonMemberAttribute), true).Length == 0 &&
-					                                           field.GetCustomAttributes(typeof(SerializeField), true).Length == 0))) {
+					if (field.IsStatic || (!field.IsPublic && (field.GetCustomAttributes (typeof(JsonMemberAttribute), true).Length == 0))) {
 						//if (Settings.DebugMode)
 							//	Console.WriteLine ("Cannot serialize " + field.Name + " : not public or is static (and does not have a JsonMember attribute)");
 						continue;
@@ -435,7 +434,7 @@ namespace JsonFx.U3DEditor
 	#if WINDOWS_STORE
 						info.GetCustomAttribute<JsonMemberAttribute>(false) == null
 	#else
-						(info.GetCustomAttributes(typeof(JsonMemberAttribute), false).Length == 0 && info.GetCustomAttributes(typeof(SerializeField), true).Length == 0)
+						(info.GetCustomAttributes(typeof(JsonMemberAttribute), false).Length == 0)
 	#endif
 					) {
 						continue;

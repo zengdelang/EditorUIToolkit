@@ -9,20 +9,12 @@ namespace EUTK
     [JsonOptIn]
     public abstract class GridItem
     {
-        [NonSerialized]
-        protected EditorWindowConfigSource m_EditorWindowConfigSource;
+        [JsonIgnore] [NonSerialized] protected EditorWindowConfigSource m_EditorWindowConfigSource;
 
-        [SerializeField]
-        protected int m_Id;
-
-        [SerializeField]
-        protected string m_DisplayName;
-
-        [SerializeField]
-        protected bool m_IsChildItem;
-
-        [SerializeField]
-        protected List<GridItem> m_ChildItems;
+        [JsonMember] [SerializeField] protected int m_Id;
+        [JsonMember] [SerializeField] protected string m_DisplayName;
+        [JsonMember] [SerializeField] protected bool m_IsChildItem;
+        [JsonMember] [SerializeField] protected List<GridItem> m_ChildItems;
 
         public virtual int Id
         {

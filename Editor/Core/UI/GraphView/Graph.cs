@@ -12,30 +12,23 @@ namespace EUTK
     [Serializable]
     public abstract class Graph : ScriptableObject
     {
-        [SerializeField] protected Vector2 m_Translation = new Vector2(-5000, -5000);
+        [JsonMember] [SerializeField] protected Vector2 m_Translation = new Vector2(-5000, -5000);
+        [JsonMember] [SerializeField] protected float m_ZoomFactor = 1f;
+        [JsonMember] [SerializeField] protected List<Node> m_Nodes = new List<Node>();
+        [JsonMember] [SerializeField] protected GraphConfig m_GraphConfig = new GraphConfig();
+        [JsonMember] [SerializeField] protected int m_AutoId;
+        [JsonMember] [SerializeField] public int m_Count;
+        [JsonMember] [SerializeField] public List<Connection> connectionList = new List<Connection>();
+        [JsonMember] [SerializeField] protected List<NodeGroup> m_NodeGroups;
 
-        [SerializeField] protected float m_ZoomFactor = 1f;
+        [JsonIgnore] [NonSerialized] public int keyboardControl;
+        [JsonIgnore] [NonSerialized] public Node[] CopiedNodes;
+        [JsonIgnore] [NonSerialized] public EditorWindowConfigSource windowConfig;
+        [JsonIgnore] [NonSerialized] public bool needRebuildGraph = true;
 
-        [SerializeField] protected List<Node> m_Nodes = new List<Node>();
-
-        [SerializeField] protected GraphConfig m_GraphConfig = new GraphConfig();
-
-        [SerializeField] protected int m_AutoId;
-
-        [SerializeField] public int m_Count;
-
-        [SerializeField] public List<Connection> connectionList = new List<Connection>();
-
-        [SerializeField] protected List<NodeGroup> m_NodeGroups;
-
-        [NonSerialized] public int keyboardControl;
-        [NonSerialized] public Node[] CopiedNodes;
-        [NonSerialized] public EditorWindowConfigSource windowConfig;
-        [NonSerialized] public bool needRebuildGraph = true;
-
-        [NonSerialized] public bool isMultiSelecting;
-        [NonSerialized] public bool isDraggingPort;
-        [NonSerialized] public int dragDropMisses;
+        [JsonIgnore] [NonSerialized] public bool isMultiSelecting;
+        [JsonIgnore] [NonSerialized] public bool isDraggingPort;
+        [JsonIgnore] [NonSerialized] public int dragDropMisses;
 
         [JsonIgnore] [SerializeField] protected List<int> m_MultiSelection = new List<int>();
 

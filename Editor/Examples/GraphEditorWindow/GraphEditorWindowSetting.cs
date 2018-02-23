@@ -1,14 +1,15 @@
-﻿using UnityEngine;
+﻿using JsonFx.U3DEditor;
+using UnityEngine;
 
 namespace EUTK
 {
     public class GraphEditorWindowSetting : FileConfigSource
     {
-        [SerializeField] protected string m_SearchText;
-        [SerializeField] protected float m_SplitLineX;
-        [SerializeField] protected bool m_IsMainButtonOn;
-        [SerializeField] protected TreeViewState m_TreeViewStateConfig;
-        [SerializeField] protected TreeItemContainer m_TreeViewDataContainer;
+        [JsonMember] [SerializeField] protected string m_SearchText;
+        [JsonMember] [SerializeField] protected float m_SplitLineX;
+        [JsonMember] [SerializeField] protected bool m_IsMainButtonOn;
+        [JsonMember] [SerializeField] protected TreeViewState m_TreeViewStateConfig;
+        [JsonMember] [SerializeField] protected TreeItemContainer m_TreeViewDataContainer;
 
         public string searchText
         {

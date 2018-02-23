@@ -29,22 +29,22 @@ namespace EUTK
             }
         }
 
-        [SerializeField] protected Vector2 m_Position = Vector2.zero;
-        [SerializeField] protected string m_CustomName;
-        [SerializeField] protected string m_Comment;
-        [SerializeField] protected int m_Id;
+        [JsonMember] [SerializeField] protected Vector2 m_Position = Vector2.zero;
+        [JsonMember] [SerializeField] protected string m_CustomName;
+        [JsonMember] [SerializeField] protected string m_Comment;
+        [JsonMember] [SerializeField] protected int m_Id;
 
-        [SerializeField] protected List<Connection> m_InConnections = new List<Connection>();
-        [SerializeField] protected List<Connection> m_OutConnections = new List<Connection>();
+        [JsonMember] [SerializeField] protected List<Connection> m_InConnections = new List<Connection>();
+        [JsonMember] [SerializeField] protected List<Connection> m_OutConnections = new List<Connection>();
 
-        [SerializeField] protected Color m_NodeNameColor;
-        [SerializeField] protected Color m_NodeColor = new Color(0.8f, 0.8f, 0.8f);
+        [JsonMember] [SerializeField] protected Color m_NodeNameColor;
+        [JsonMember] [SerializeField] protected Color m_NodeColor = new Color(0.8f, 0.8f, 0.8f);
 
-        [NonSerialized] protected Vector2 m_Size = new Vector2(100, 20);
-        [NonSerialized] protected bool m_IsDragging;
-        [NonSerialized] protected GUIStyle m_CenterLabel;
-        [NonSerialized] protected Vector2 m_MinSize = new Vector2(100, 20);
-        [NonSerialized] protected string m_NodeName;
+        [JsonIgnore] [NonSerialized] protected Vector2 m_Size = new Vector2(100, 20);
+        [JsonIgnore] [NonSerialized] protected bool m_IsDragging;
+        [JsonIgnore] [NonSerialized] protected GUIStyle m_CenterLabel;
+        [JsonIgnore] [NonSerialized] protected Vector2 m_MinSize = new Vector2(100, 20);
+        [JsonIgnore] [NonSerialized] protected string m_NodeName;
 
         public Graph graph
         {
@@ -108,6 +108,16 @@ namespace EUTK
         {
             get { return m_CustomName; }
             set { m_CustomName = value; }
+        }
+
+        protected virtual bool doubleClickOpenScript
+        {
+            get; set;
+        }
+
+        protected virtual bool showOpenScriptBtnInInspector
+        {
+            get; set;
         }
 
         protected string hexColor
@@ -309,7 +319,7 @@ namespace EUTK
                 graph.ShowSelectionInspectorGUI();
 
 
-                if (e.button == 0 && e.clickCount == 2)
+                if (e.button == 0 && e.clickCount == 2 && doubleClickOpenScript)
                 {
                     EditorHelper.OpenScriptOfType(GetType());
                     e.Use();
@@ -507,9 +517,17 @@ namespace EUTK
             m_NodeColor = EditorGUILayout.ColorField("Node Color", m_NodeColor);
             OnNodeInspectorGUI();
 
+            if (showOpenScriptBtnInInspector)
+            {
+                if (GUILayout.Button("Open Node Script"))
+                {
+                    EditorHelper.OpenScriptOfType(GetType());
+                    e.Use();
+                }
+            }
+
             nodeComment = EditorGUILayout.TextArea(nodeComment);
             EditorInspectorGUIUtility.TextFieldComment(nodeComment, "Comments...");
-
 
             if (GUI.changed)
             {

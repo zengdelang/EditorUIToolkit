@@ -113,7 +113,8 @@ namespace EUTK
             if (m_TreeView != null)
             {
                 m_TreeView.EndNameEditing(true);
-                m_TreeView.EndPing();
+                if(m_TreeView.gui != null)
+                    m_TreeView.EndPing();
             }
         }
 

@@ -76,7 +76,7 @@ namespace JsonFx.U3DEditor
 				throw new ArgumentException();
 			}
 
-			return provider.IsDefined(typeof(JsonIgnoreAttribute), true) || provider.IsDefined(typeof(NonSerializedAttribute), true);
+			return provider.IsDefined(typeof(JsonIgnoreAttribute), true);
 		}
 
 		/// <summary>

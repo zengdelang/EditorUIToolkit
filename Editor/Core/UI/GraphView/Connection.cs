@@ -19,24 +19,24 @@ namespace EUTK
 
         protected const float RELINK_DISTANCE_SNAP = 20f;
 
-        [SerializeField] protected int m_SourceNodeId;
-        [SerializeField] protected int m_TargetNodeId;
-        [SerializeField] protected int m_Id;
-        [SerializeField] protected bool m_InfoCollapsed;
+        [JsonMember] [SerializeField] protected int m_SourceNodeId;
+        [JsonMember] [SerializeField] protected int m_TargetNodeId;
+        [JsonMember] [SerializeField] protected int m_Id;
+        [JsonMember] [SerializeField] protected bool m_InfoCollapsed;
 
-        [NonSerialized] protected Node m_SourceNode;
-        [NonSerialized] protected Node m_TargetNode;
-        [NonSerialized] protected Rect m_AreaRect = new Rect(0, 0, 50, 10);
-        [NonSerialized] protected Color m_ConnectionColor = new Color(0.7f, 0.7f, 1f, 0.8f);
-        [NonSerialized] protected float m_LineSize = 3;
+        [JsonIgnore] [NonSerialized] protected Node m_SourceNode;
+        [JsonIgnore] [NonSerialized] protected Node m_TargetNode;
+        [JsonIgnore] [NonSerialized] protected Rect m_AreaRect = new Rect(0, 0, 50, 10);
+        [JsonIgnore] [NonSerialized] protected Color m_ConnectionColor = new Color(0.7f, 0.7f, 1f, 0.8f);
+        [JsonIgnore] [NonSerialized] protected float m_LineSize = 3;
 
-        [NonSerialized] protected Vector3 m_LineFromTangent = Vector3.zero;
-        [NonSerialized] protected Vector3 m_LineToTangent = Vector3.zero;
-        [NonSerialized] protected bool m_IsRelinking;
-        [NonSerialized] protected Vector3 m_RelinkClickPos;
+        [JsonIgnore] [NonSerialized] protected Vector3 m_LineFromTangent = Vector3.zero;
+        [JsonIgnore] [NonSerialized] protected Vector3 m_LineToTangent = Vector3.zero;
+        [JsonIgnore] [NonSerialized] protected bool m_IsRelinking;
+        [JsonIgnore] [NonSerialized] protected Vector3 m_RelinkClickPos;
 
-        [NonSerialized] protected Rect m_StartPortRect;
-        [NonSerialized] protected Rect m_EndPortRect;
+        [JsonIgnore] [NonSerialized] protected Rect m_StartPortRect;
+        [JsonIgnore] [NonSerialized] protected Rect m_EndPortRect;
 
         protected virtual Color defaultColor
         {

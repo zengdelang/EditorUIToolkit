@@ -1,14 +1,13 @@
-﻿using UnityEngine;
+﻿using JsonFx.U3DEditor;
+using UnityEngine;
 
 namespace EUTK
 {
     public class GridViewTestWindowSetting1 : FileConfigSource
     {
-        [SerializeField] protected string name1;
-
-        [SerializeField] protected GridViewConfig m_GvConfig;
-
-        [SerializeField] protected ItemDataSource gvds;
+        [JsonMember] [SerializeField] protected string name1;
+        [JsonMember] [SerializeField] protected GridViewConfig m_GvConfig;
+        [JsonMember] [SerializeField] protected ItemDataSource gvds;
 
         public string Name
         {
@@ -38,11 +37,9 @@ namespace EUTK
 
     public class GridViewTestWindowSetting2 : AssetConfigSource
     {
-        [SerializeField] protected string name1;
-
-        [SerializeField] protected GridViewConfig m_GvConfig;
-
-        [SerializeField] protected ItemDataSource gvds;
+        [JsonMember] [SerializeField] protected string name1;
+        [JsonMember] [SerializeField] protected GridViewConfig m_GvConfig;
+        [JsonMember] [SerializeField] protected ItemDataSource gvds;
 
         public string Name
         {

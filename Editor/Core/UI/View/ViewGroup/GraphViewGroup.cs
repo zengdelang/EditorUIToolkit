@@ -47,15 +47,18 @@ namespace EUTK
             get { return m_IsMainButtonOn; }
             set
             {
-                m_IsMainButtonOn = value;
-                if (m_WindowConfig != null)
+                if (m_IsMainButtonOn != value)
                 {
-                    if (m_WindowConfig.FindProperty(mainButtonOnConfigKey) != null)
+                    m_IsMainButtonOn = value;
+                    if (m_WindowConfig != null)
                     {
-                        m_WindowConfig.SetValue(mainButtonOnConfigKey, m_IsMainButtonOn);
+                        if (m_WindowConfig.FindProperty(mainButtonOnConfigKey) != null)
+                        {
+                            m_WindowConfig.SetValue(mainButtonOnConfigKey, m_IsMainButtonOn);
+                        }
+                        m_WindowConfig.SetConfigDirty();
                     }
-                    m_WindowConfig.SetConfigDirty();
-                }
+                }               
             }
         }
 

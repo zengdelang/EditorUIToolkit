@@ -510,7 +510,7 @@ namespace EUTK
                 GUI.Box(new Rect(scaleRect.x + 10, scaleRect.y + 10, 6, 6), string.Empty, GraphStyles.scaleArrow);
 
                 var size = 14 / zoomFactor;
-                var name = string.Format("<m_Size={0}>{1}</m_Size>", size, group.name);
+                var name = string.Format("<size={0}>{1}</size>", size, group.name);
                 GUI.Label(handleRect, name, style);
 
                 EditorGUIUtility.AddCursorRect(handleRect, group.isRenaming ? MouseCursor.Text : MouseCursor.Link);

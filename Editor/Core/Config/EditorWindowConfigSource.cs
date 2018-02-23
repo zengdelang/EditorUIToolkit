@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Text;
 using JsonFx.U3DEditor;
 using SharpZipLib.U3DEditor.GZip;
@@ -8,15 +9,23 @@ namespace EUTK
 {
     public abstract class EditorWindowConfigSource : ScriptableObjectWrap
     {
-        [HideInInspector]
+        public class ValidFlag
+        {
+            
+        }
+
+        [HideInInspector] [JsonIgnore] [SerializeField] protected byte[] m_Data;
+
+        [JsonIgnore] [NonSerialized] protected bool m_LazyMode;
+        [JsonIgnore] [NonSerialized] protected bool m_IsDirty;
+
+        /// <summary>
+        /// Unity再Play模式下，如果正在编译，有概率会导致配置对象数据被重置，如果validFlag在保存数据的时候为空
+        /// 说明当前数据可能损坏，不应该保存当前数据
+        /// </summary>
         [JsonIgnore]
         [SerializeField]
-        protected byte[] m_Data;
-
-        [JsonIgnore]
-        protected bool m_LazyMode;
-        [JsonIgnore]
-        protected bool m_IsDirty;
+        public ValidFlag validFlag;
 
         protected EditorWindowConfigSource()
         {

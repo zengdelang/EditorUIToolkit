@@ -17,9 +17,9 @@ namespace EUTK
 
         protected override void InitData()
         {
-            m_WindowConfigSource = FileConfigSource.CreateFileConfigSource("ViewConfig/TestWindow/config3.txt", true, typeof(ObjectTreeViewTestWindowConfig));
+            WindowConfigSource = FileConfigSource.CreateFileConfigSource("ViewConfig/TestWindow/config3.txt", true, typeof(ObjectTreeViewTestWindowConfig));
 
-            m_ObjectTreeViewGroup = new ObjectTreeViewGroup(m_LayoutGroupMgr, m_WindowConfigSource, "TreeViewStateConfig", "TreeViewDataContainer");
+            m_ObjectTreeViewGroup = new ObjectTreeViewGroup(m_LayoutGroupMgr, WindowConfigSource, "TreeViewStateConfig", "TreeViewDataContainer");
 
             m_DataContainer = m_ObjectTreeViewGroup.GetDataContainer();
             m_TreeView = m_ObjectTreeViewGroup.GetTreeView();
@@ -41,7 +41,7 @@ namespace EUTK
 
         private void UndoRedoPerformedAction()
         {
-            m_WindowConfigSource.SetConfigDirty();
+            WindowConfigSource.SetConfigDirty();
             m_TreeView.data.RefreshData();
         }
 
@@ -54,7 +54,7 @@ namespace EUTK
                 var item = m_TreeView.data.FindItem(itemId);
                 var id = m_DataContainer.GetAutoID();
                 var newItem = new TreeViewItem(id, item.depth + 1, item, "New Item");
-                newItem.SetConfigSource(m_WindowConfigSource);
+                newItem.SetConfigSource(WindowConfigSource);
                 item.AddChild(newItem);
                 m_TreeView.SetSelection(new int[] { newItem.id }, true);
                 m_TreeView.data.RefreshData();
@@ -86,11 +86,11 @@ namespace EUTK
                 }
                 var id = m_DataContainer.GetAutoID();
                 var newItem = new TreeViewItem(id, 0, item, "New Item");
-                newItem.SetConfigSource(m_WindowConfigSource);
+                newItem.SetConfigSource(WindowConfigSource);
                 item.AddChild(newItem);
                 m_TreeView.SetSelection(new int[] { newItem.id }, true);
                 m_TreeView.data.RefreshData();
-                m_WindowConfigSource.SetConfigDirty();
+                WindowConfigSource.SetConfigDirty();
             });
             g.ShowAsContext();
         }

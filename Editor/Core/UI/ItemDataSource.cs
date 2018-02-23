@@ -1,17 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
+using JsonFx.U3DEditor;
 using UnityEngine;
 
 namespace EUTK
 {
-    [Serializable]
+    [JsonClassType]
+    [JsonOptIn]
     public class ItemDataSource
     {
-        protected EditorWindowConfigSource m_ConfigSource;
-        [SerializeField]
-        protected List<GridItem> m_ItemList = new List<GridItem>();
-        [SerializeField]
-        protected int m_MaxItemId;
+        [JsonIgnore] [NonSerialized] protected EditorWindowConfigSource m_ConfigSource;
+        [JsonMember] [SerializeField] protected List<GridItem> m_ItemList = new List<GridItem>();
+        [JsonMember] [SerializeField] protected int m_MaxItemId;
 
         public int Count
         {

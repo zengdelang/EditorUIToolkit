@@ -263,7 +263,8 @@ namespace EUTK
             base.OnLostFocus();
             if (m_TreeView != null)
             {
-                m_TreeView.EndPing();
+                if (m_TreeView.gui != null)
+                    m_TreeView.EndPing();
                 m_TreeView.EndNameEditing(true);
             }
 

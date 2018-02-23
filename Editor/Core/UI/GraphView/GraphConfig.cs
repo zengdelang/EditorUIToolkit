@@ -4,11 +4,11 @@ using UnityEngine;
 
 namespace EUTK
 {
+    [JsonClassType]
     [JsonOptIn]
     [Serializable]
     public class GraphConfig
     {
-        [SerializeField]
-        public bool allowClick = true;
+        [JsonMember] [SerializeField] public bool allowClick = true;
     }
 }

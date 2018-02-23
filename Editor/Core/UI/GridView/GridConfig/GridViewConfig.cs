@@ -1,47 +1,28 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using JsonFx.U3DEditor;
 using UnityEngine;
 
 namespace EUTK
 {
+    [JsonClassType]
     [JsonOptIn]
+    [Serializable]
     public class GridViewConfig
     {
-        [JsonIgnore]
-        private EditorWindowConfigSource m_ConfigSource;
+        [JsonIgnore] [NonSerialized] private EditorWindowConfigSource m_ConfigSource;
 
-        [SerializeField]
-        private bool m_AllowDragging = true;
-
-        [SerializeField]
-        private bool m_AllowRenaming = true;
-
-        [SerializeField]
-        private bool m_AllowMultiSelect = true;
-
-        [SerializeField]
-        private bool m_AllowDeselection = true;
-
-        [SerializeField]
-        private bool m_AllowFocusRendering = true;
-
-        [SerializeField]
-        private bool m_AllowFindNextShortcut = true;
-
-        [SerializeField]
-        private List<int> m_SelectedItemIdList = new List<int>();
-
-        [SerializeField]
-        public List<int> m_ExpandedItemIdList = new List<int>();
-
-        [SerializeField]
-        private int m_LastClickedItemId;
-
-        [SerializeField]
-        public Vector2 m_ScrollPosition;
-
-        [SerializeField]
-        private int m_GridSize = 64;
+        [JsonMember] [SerializeField] private bool m_AllowDragging = true;
+        [JsonMember] [SerializeField] private bool m_AllowRenaming = true;
+        [JsonMember] [SerializeField] private bool m_AllowMultiSelect = true;
+        [JsonMember] [SerializeField] private bool m_AllowDeselection = true;
+        [JsonMember] [SerializeField] private bool m_AllowFocusRendering = true;
+        [JsonMember] [SerializeField] private bool m_AllowFindNextShortcut = true;
+        [JsonMember] [SerializeField] private List<int> m_SelectedItemIdList = new List<int>();
+        [JsonMember] [SerializeField] public List<int> m_ExpandedItemIdList = new List<int>();
+        [JsonMember] [SerializeField] private int m_LastClickedItemId;
+        [JsonMember] [SerializeField] public Vector2 m_ScrollPosition;
+        [JsonMember] [SerializeField] private int m_GridSize = 64;
 
         public int GridSize
         {

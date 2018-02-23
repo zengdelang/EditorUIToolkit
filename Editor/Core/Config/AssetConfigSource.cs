@@ -12,7 +12,15 @@ namespace EUTK
     {
         protected override void Save()
         {
+            if (validFlag == null)
+            {
+                return;
+            }
             var info = JsonWriter.Serialize(this, new JsonWriterSettings() { MaxDepth = Int32.MaxValue });
+            if (validFlag == null)
+            {
+                return;
+            }
             m_Data = Compress(info);
             EditorUtility.SetDirty(this);
         }

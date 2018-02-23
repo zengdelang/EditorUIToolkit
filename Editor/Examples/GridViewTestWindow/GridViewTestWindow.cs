@@ -1,11 +1,12 @@
-﻿using UnityEditor;
+﻿using JsonFx.U3DEditor;
+using UnityEditor;
 using UnityEngine;
 
 namespace EUTK
 {
     public class GenericGridItem : GridItem
     {
-        [SerializeField] public bool isFolder;
+        [JsonMember] [SerializeField] public bool isFolder;
 
         public override Texture Texture
         {
@@ -18,8 +19,8 @@ namespace EUTK
 
     public class GenericGridItem1 : GridItem
     {
-        [SerializeField] public bool test;
-        [SerializeField] public int flag;
+        [JsonMember] [SerializeField] public bool test;
+        [JsonMember] [SerializeField] public int flag;
 
         public override Texture Texture
         {
@@ -43,13 +44,13 @@ namespace EUTK
 
         protected override void InitData()
         {
-            m_WindowConfigSource = FileConfigSource.CreateFileConfigSource("ViewConfig/TestWindow/config.txt", true, typeof(GridViewTestWindowSetting1));
+            WindowConfigSource = FileConfigSource.CreateFileConfigSource("ViewConfig/TestWindow/config.txt", true, typeof(GridViewTestWindowSetting1));
 
-            m_ItemDataSource = m_WindowConfigSource.GetValue<ItemDataSource>("Gvds");
+            m_ItemDataSource = WindowConfigSource.GetValue<ItemDataSource>("Gvds");
             if (m_ItemDataSource == null)
             {
                 m_ItemDataSource = new ItemDataSource();
-                m_WindowConfigSource.SetValue("Gvds", m_ItemDataSource);
+                WindowConfigSource.SetValue("Gvds", m_ItemDataSource);
             }
             m_ItemDataSource.SetConfigSource(WindowConfigSource);
 

@@ -230,10 +230,8 @@ namespace JsonFx.U3DEditor
 			}*/
 
 			//If the class is specified as opt-in serialization only, members must have the JsonMember attribute
-			if (objType.GetCustomAttributes (typeof(JsonOptInAttribute),true).Length != 0 ||
-			    objType.GetCustomAttributes(typeof(SerializableAttribute), true).Length != 0) {
-				if (member.GetCustomAttributes(typeof(JsonMemberAttribute),true).Length == 0 &&
-				    member.GetCustomAttributes(typeof(SerializeField), true).Length == 0) {
+			if (objType.GetCustomAttributes (typeof(JsonOptInAttribute),true).Length != 0){
+				if (member.GetCustomAttributes(typeof(JsonMemberAttribute),true).Length == 0) {
 					return true;
 				}
 			}

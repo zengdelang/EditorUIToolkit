@@ -4,26 +4,26 @@ namespace EUTK
 {
     public class GraphStyles
     {
-        protected static GUISkin s_GraphStyle;
+        protected static GUISkin s_GraphSkin;
 
-        public static GUISkin GraphStyle
+        public static GUISkin GraphSkin
         {
             get
             {
-                if (s_GraphStyle == null)
-                    s_GraphStyle = Resources.Load<GUISkin>("GraphStyle");
-                return s_GraphStyle;
+                if (s_GraphSkin == null)
+                    s_GraphSkin = Resources.Load<GUISkin>("GraphSkin");
+                return s_GraphSkin;
             }
         }
 
         public static GUIStyle windowHighlight
         {
-            get { return GraphStyle.GetStyle("windowHighlight"); }
+            get { return GraphSkin.GetStyle("windowHighlight"); }
         }
 
         public static GUIStyle window
         {
-            get { return GraphStyle.GetStyle("window"); }
+            get { return GraphSkin.GetStyle("window"); }
         }
 
         public static GUIStyle selectionRect
@@ -33,42 +33,52 @@ namespace EUTK
 
         public static GUIStyle selection
         {
-            get { return GraphStyle.GetStyle("selection"); }
+            get { return GraphSkin.GetStyle("selection"); }
+        }
+
+        public static GUIStyle lightButton
+        {
+            get { return GUIUtilityWrap.GetDefaultSkin(1).GetStyle("button"); }
+        }
+
+        public static GUIStyle lightTextField
+        {
+            get { return GUIUtilityWrap.GetDefaultSkin(1).GetStyle("textField"); }
         }
 
         public static GUIStyle circle
         {
-            get { return GraphStyle.GetStyle("circle"); }
+            get { return GraphSkin.GetStyle("circle"); }
         }
 
         public static GUIStyle textArea
         {
-            get { return GraphStyle.GetStyle("textArea"); }
+            get { return GraphSkin.GetStyle("textArea"); }
         }
 
         public static GUIStyle arrowLeft
         {
-            get { return GraphStyle.GetStyle("arrowLeft"); }
+            get { return GraphSkin.GetStyle("arrowLeft"); }
         }
 
         public static GUIStyle arrowRight
         {
-            get { return GraphStyle.GetStyle("arrowRight"); }
+            get { return GraphSkin.GetStyle("arrowRight"); }
         }
 
         public static GUIStyle arrowTop
         {
-            get { return GraphStyle.GetStyle("arrowTop"); }
+            get { return GraphSkin.GetStyle("arrowTop"); }
         }
 
         public static GUIStyle arrowBottom
         {
-            get { return GraphStyle.GetStyle("arrowBottom"); }
+            get { return GraphSkin.GetStyle("arrowBottom"); }
         }
 
         public static GUIStyle scaleArrow
         {
-            get { return GraphStyle.GetStyle("scaleArrow"); }
+            get { return GraphSkin.GetStyle("scaleArrow"); }
         }
 
         public static Texture2D ConnectionPoint

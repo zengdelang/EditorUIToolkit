@@ -24,9 +24,9 @@ namespace EUTK
 
         protected override void InitData()
         {
-            m_WindowConfigSource = FileConfigSource.CreateFileConfigSource("ViewConfig/TestWindow/config4.txt", true, typeof(FolderTreeViewTestWindowConfig));
+            WindowConfigSource = FileConfigSource.CreateFileConfigSource("ViewConfig/TestWindow/config4.txt", true, typeof(FolderTreeViewTestWindowConfig));
 
-            m_FolderTreeViewGroup = new FolderTreeViewGroup(m_LayoutGroupMgr, m_WindowConfigSource, "TreeViewStateConfig", "TreeViewDataContainer");
+            m_FolderTreeViewGroup = new FolderTreeViewGroup(m_LayoutGroupMgr, WindowConfigSource, "TreeViewStateConfig", "TreeViewDataContainer");
             m_FolderTreeViewGroup.Active = false;
 
             m_DataContainer = m_FolderTreeViewGroup.GetDataContainer();
@@ -62,7 +62,8 @@ namespace EUTK
                             m_TreeView.state.scrollPos = Vector2.zero;
                             if (m_TreeView.data != null)
                                 m_TreeView.data.ReloadData();
-                            m_WindowConfigSource.SetConfigDirty();
+                            WindowConfigSource.SetConfigDirty();
+                            WindowConfigSource.SaveConfigLazily();
                         }
                     }
                 }

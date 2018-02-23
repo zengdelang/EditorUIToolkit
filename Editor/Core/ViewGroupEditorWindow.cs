@@ -7,11 +7,16 @@ namespace EUTK
     public abstract class ViewGroupEditorWindow : EditorWindow
     {
         protected ViewGroupManager m_LayoutGroupMgr;
-        protected EditorWindowConfigSource m_WindowConfigSource;
+        private EditorWindowConfigSource m_WindowConfigSource;
 
         public virtual EditorWindowConfigSource WindowConfigSource
         {
             get { return m_WindowConfigSource; }
+            set
+            {
+                m_WindowConfigSource = value;
+                m_WindowConfigSource.validFlag = new EditorWindowConfigSource.ValidFlag();
+            }
         }
 
         public virtual Action ConfigSourceChangedAction { get; set; }
@@ -114,12 +119,22 @@ namespace EUTK
         {
             if (m_LayoutGroupMgr == null)
             {
+                EditorApplication.playModeStateChanged += PlayModeState;
                 m_LayoutGroupMgr = new ViewGroupManager(this);
                 InitData();
             }
         }
 
         protected abstract void InitData();
+
+        private void PlayModeState(PlayModeStateChange state)
+        {
+            if (state == PlayModeStateChange.EnteredEditMode)
+            {
+                m_LayoutGroupMgr = null;
+                Repaint();
+            }
+        }
 
         public virtual void ChangeWindowConfigSource(EditorWindowConfigSource configSource)
         {

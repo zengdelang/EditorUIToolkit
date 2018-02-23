@@ -14,7 +14,15 @@ namespace EUTK
 
         protected override void Save()
         {
+            if (validFlag == null)
+            {
+                return;
+            }
             var content = JsonWriter.Serialize(this, new JsonWriterSettings() { MaxDepth = Int32.MaxValue });
+            if (validFlag == null)
+            {
+                return;
+            }
             var filePath = Path.GetFullPath(m_FilePath);
             var dirPath = Path.GetDirectoryName(filePath);
             if (!Directory.Exists(dirPath))

@@ -1,21 +1,22 @@
 ﻿using System;
+using JsonFx.U3DEditor;
 using UnityEditor;
 using UnityEngine;
 
 namespace EUTK
 {
+    [JsonClassType]
+    [JsonOptIn]
     [Serializable]
     public class NodeGroup
     {
-        [SerializeField] public string name;
-        [SerializeField] [HideInInspector] public Rect rect;
-        [SerializeField] public Color color;
+        [JsonMember] [SerializeField] public string name;
+        [JsonMember] [SerializeField] [HideInInspector] public Rect rect;
+        [JsonMember] [SerializeField] public Color color;
 
-        [NonSerialized] public bool isDragging;
-        [NonSerialized] public bool isRescaling;
-        [NonSerialized] public bool isRenaming;
-
-      
+        [JsonIgnore] [NonSerialized] public bool isDragging;
+        [JsonIgnore] [NonSerialized] public bool isRescaling;
+        [JsonIgnore] [NonSerialized] public bool isRenaming;
 
         public NodeGroup()
         {
@@ -33,11 +34,5 @@ namespace EUTK
             name = EditorGUILayout.TextField("Node Group Name", name);
             color = EditorGUILayout.ColorField("Node Group Color", color);
         }
-    }
-
-    public class NodeGroupInspectorGUI : ScriptableObject
-    {
-        [HideInInspector] public NodeGroup nodeGroup;
-        public Action SetDirtyAction;
     }
 }

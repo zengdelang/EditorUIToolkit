@@ -1,11 +1,12 @@
-﻿using UnityEngine;
+﻿using JsonFx.U3DEditor;
+using UnityEngine;
 
 namespace EUTK
 {
     public class ObjectTreeViewTestWindowConfig : FileConfigSource
     {
-        [SerializeField] protected TreeViewState m_TreeViewStateConfig;
-        [SerializeField] protected TreeItemContainer m_TreeViewDataContainer;
+        [JsonMember] [SerializeField] protected TreeViewState m_TreeViewStateConfig;
+        [JsonMember] [SerializeField] protected TreeItemContainer m_TreeViewDataContainer;
 
         public TreeViewState TreeViewStateConfig
         {
