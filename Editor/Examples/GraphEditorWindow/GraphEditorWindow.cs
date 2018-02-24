@@ -165,6 +165,23 @@ namespace EUTK
 
         private void ContextClickItemCallback(int itemId)
         {
+            GenericMenu g = new GenericMenu();
+            g.AddItem(new GUIContent("Create Item"), false, () =>
+            {
+                var item = m_TreeView.data.FindItem(itemId);
+                var id = m_DataContainer.GetAutoID();
+                var newItem = new GMCategoryItem(id, 0, item, "New Item");
+                newItem.SetConfigSource(WindowConfigSource);
+
+                item.AddChild(newItem);
+                m_TreeView.SetSelection(new int[] { newItem.id }, true);
+                m_TreeView.data.RefreshData();
+
+                TreeViewSelectionChanged(new int[] { newItem.id });
+                WindowConfigSource.SetConfigDirty();
+            });
+
+            g.ShowAsContext();
             Event.current.Use();
         }
 
