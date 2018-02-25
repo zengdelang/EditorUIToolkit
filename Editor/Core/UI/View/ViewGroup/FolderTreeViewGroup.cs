@@ -174,6 +174,7 @@ namespace EUTK
                             bool askIfSure = Event.current.commandName == "SoftDelete";
                             if (DeleteItemsAction != null)
                                 DeleteItemsAction(askIfSure);
+                            m_TreeView.NotifyListenersThatSelectionChanged();
                         }
                         GUIUtility.ExitGUI();
                     }
@@ -185,6 +186,7 @@ namespace EUTK
                             {
                                 Event.current.Use();
                                 DuplicateItemsAction();
+                                m_TreeView.NotifyListenersThatSelectionChanged();
                             }
                         }
                         else

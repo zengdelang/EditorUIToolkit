@@ -323,7 +323,7 @@ namespace EUTK
             }
 
             if ((e.button == 2 && e.type == EventType.MouseDrag)
-                || ((e.type == EventType.MouseDown || e.type == EventType.MouseDrag) && e.alt && e.isMouse))
+                || (e.type == EventType.MouseDrag) && e.alt && e.isMouse)
             {
                 pan += e.delta;
                 m_SmoothPan = null;

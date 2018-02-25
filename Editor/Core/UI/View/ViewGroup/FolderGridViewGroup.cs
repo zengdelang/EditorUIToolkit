@@ -296,6 +296,8 @@ namespace EUTK
 
                             if (askIfSure)
                                 Owner.WindowOwner.Focus();
+
+                            m_TreeView.NotifyListenersThatSelectionChanged();
                         }
                         GUIUtility.ExitGUI();
                     }
@@ -313,6 +315,7 @@ namespace EUTK
                             {
                                 Event.current.Use();
                                 DuplicateItemsAction();
+                                m_TreeView.NotifyListenersThatSelectionChanged();
                             }
                         }
                         else

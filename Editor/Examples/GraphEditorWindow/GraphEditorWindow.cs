@@ -145,10 +145,6 @@ namespace EUTK
             m_LayoutGroupMgr.AddViewGroup(m_GraphViewGroup);
 
             m_GraphViewGroup.objectTreeViewGroup.needUndo = false;
-            m_GraphViewGroup.objectTreeViewGroup.DeleteDoneAction += () =>
-            {
-                TreeViewSelectionChanged(m_TreeView.GetSelection());
-            };
             m_GraphViewGroup.objectTreeViewGroup.OnGUIInitAction += () =>
             {
                 TreeViewSelectionChanged(m_TreeView.GetSelection());
@@ -161,6 +157,12 @@ namespace EUTK
             m_GraphViewGroup.searchBar.OnTextChangedAction += OnTextChangedAction;
             m_GraphViewGroup.searchBar.LoadConfig("searchText", WindowConfigSource);
             m_TreeView.state.searchString = m_GraphViewGroup.searchBar.SearchText;
+            m_TreeView.dragEndedCallback += DragEnedCallback;
+        }
+
+        private void DragEnedCallback(int[] draggedIDs, bool draggedItemsFromOwnTreeView)
+        {
+            TreeViewSelectionChanged(m_TreeView.GetSelection());
         }
 
         private void ContextClickItemCallback(int itemId)

@@ -118,7 +118,7 @@ namespace EUTK
             m_ObjectTreeViewGroup = new ObjectTreeViewGroup(owner, configSource, stateConfigName, containerConfigName,
                 dragId);
             m_TreeView = m_ObjectTreeViewGroup.GetTreeView();
-
+ 
             m_SearchBar = new SearchBar(owner);
             m_SearchBar.OnGUIAction += ShowBarGUI;
         }
@@ -140,6 +140,13 @@ namespace EUTK
                     m_TreeView.EndPing();
                 m_TreeView.EndNameEditing(true);
             }
+        }
+
+        public override void Update()
+        {
+            base.Update();
+            if(m_GraphView != null)
+                m_GraphView.Update();
         }
 
         public override void OnInspectorUpdate()
