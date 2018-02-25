@@ -31,7 +31,7 @@
 using System;
 using System.Collections.Generic;
 using System.Reflection;
-using UnityEngine;
+
 #if WINDOWS_STORE
 using TP = System.Reflection.TypeInfo;
 #else
