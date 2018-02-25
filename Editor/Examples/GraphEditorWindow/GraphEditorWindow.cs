@@ -84,8 +84,8 @@ namespace EUTK
         protected override void OnNodeGUI()
         {
             base.OnNodeGUI();
-            haha11 = EditorGUILayout.TextArea(haha11);
-            if (GUILayout.Button("执行"))
+            haha11 = EditorGUILayout.TextArea(haha11, GraphStyles.lightTextField);
+            if (GUILayout.Button("执行", GraphStyles.lightButton))
             {
                 EditorWindow.focusedWindow.ShowNotification(new GUIContent("11322"));
             }

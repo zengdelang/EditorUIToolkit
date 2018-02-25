@@ -17,23 +17,5 @@ namespace EUTK
             guiRect.y = vector2.y;
             return guiRect;
         }
-
-        public static GUISkin GetDefaultSkin(int skinMode)
-        {
-            if (getDefaultSkinDelegate != null)
-            {
-                return getDefaultSkinDelegate(skinMode);
-            }
-
-            Type type = typeof(GUIUtility);
-            var mf = type.GetMethod("GetDefaultSkin",
-                BindingFlags.Static | BindingFlags.NonPublic, null, new Type[] { typeof(int) }, null);
-
-            var action = (GetDefaultSkinDelegate)Delegate.CreateDelegate(typeof(GetDefaultSkinDelegate), mf);
-            if (action == null)
-                throw new NullReferenceException("action");
-            getDefaultSkinDelegate = action;
-            return mf.Invoke(null, new object[]{skinMode}) as GUISkin;
-        }
     }
 }

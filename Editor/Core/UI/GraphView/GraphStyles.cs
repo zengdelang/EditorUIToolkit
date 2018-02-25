@@ -38,12 +38,12 @@ namespace EUTK
 
         public static GUIStyle lightButton
         {
-            get { return GUIUtilityWrap.GetDefaultSkin(1).GetStyle("button"); }
+            get { return GraphSkin.GetStyle("lightButton"); }
         }
 
         public static GUIStyle lightTextField
         {
-            get { return GUIUtilityWrap.GetDefaultSkin(1).GetStyle("textField"); }
+            get { return GraphSkin.GetStyle("lightTextField"); }
         }
 
         public static GUIStyle circle
