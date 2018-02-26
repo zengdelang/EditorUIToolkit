@@ -22,6 +22,14 @@ namespace EUTK
         protected TreeItemContainer m_TreeItemContainer;
         protected TreeViewState m_TreeViewState;
 
+        protected bool m_ShowSearchBar;
+
+        public bool ShowSearchBar
+        {
+            get { return m_ShowSearchBar; }
+            set { m_ShowSearchBar = value; }
+        }
+
         public GraphView graphView
         {
             get { return m_GraphView; }
@@ -191,7 +199,15 @@ namespace EUTK
                 m_HorizontalSplitLine.OnGUI(0, EditorStyles.toolbar.fixedHeight, position.height);
             }
 
-            m_SearchBar.OnGUI(toolBarRect);
+            if (ShowSearchBar)
+            {
+                m_SearchBar.OnGUI(toolBarRect);
+            }
+            else
+            {
+                graphViewRect = rect;
+            }
+            
             m_GraphView.OnGUI(graphViewRect);
         }
 

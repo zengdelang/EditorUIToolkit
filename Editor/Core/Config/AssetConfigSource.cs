@@ -27,7 +27,13 @@ namespace EUTK
 
         public static EditorWindowConfigSource CreateAssetConfigSource(string configAssetPath, bool lazyMode, Type type)
         {
-            var configSource = Resources.Load<AssetConfigSource>(configAssetPath);
+            var assetPath = "";
+            var configSource = Resources.Load(configAssetPath) as AssetConfigSource;
+            if (configSource != null && configSource.GetType() != type)
+            {
+                assetPath = AssetDatabase.GetAssetPath(configSource);
+                configSource = null;
+            }
 
             if (configSource != null)
             {
@@ -43,15 +49,21 @@ namespace EUTK
                 return configSource;
             }
 
-            var path = Path.Combine(Application.dataPath, "Editor/Resources/Config/");
-            if (!Directory.Exists(path))
-            {
-                Directory.CreateDirectory(path);
-            }
-
             configSource = CreateInstance(type) as AssetConfigSource;
             configSource.m_LazyMode = lazyMode;
-            AssetDatabase.CreateAsset(configSource, "Assets/Editor/Resources/" + configAssetPath + ".asset");
+
+            if (string.IsNullOrEmpty(assetPath))
+            {
+                Debug.LogError(111);
+                assetPath = "Assets/Editor/Resources/" + configAssetPath + ".asset";
+                var path = Path.Combine(Application.dataPath, "Editor/Resources/");
+                if (!Directory.Exists(path))
+                {
+                    Directory.CreateDirectory(path);
+                }
+            }
+
+            AssetDatabase.CreateAsset(configSource, assetPath);
             AssetDatabase.Refresh();
             return configSource;
         }
