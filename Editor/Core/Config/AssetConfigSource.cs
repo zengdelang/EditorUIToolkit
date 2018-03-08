@@ -23,6 +23,7 @@ namespace EUTK
             }
             m_Data = Compress(info);
             EditorUtility.SetDirty(this);
+            AssetDatabase.SaveAssets();
         }
 
         public static EditorWindowConfigSource CreateAssetConfigSource(string configAssetPath, bool lazyMode, Type type)
