@@ -23,6 +23,7 @@ Unity编辑器UI工具集，已经支持如下编辑器UI
 
 ## 6 AddItemWinow
 
-![](https://github.com/zengdelang/EditorUIToolkit/raw/master/Editor/Examples/Images/AddItemWinow.png)
+![](https://github.com/zengdelang/EditorUIToolkit/raw/master/Editor/Examples/Images/AddItemWindow.png)
+
 
 
