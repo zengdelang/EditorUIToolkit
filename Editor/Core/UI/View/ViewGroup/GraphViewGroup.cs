@@ -22,7 +22,7 @@ namespace EUTK
         protected TreeItemContainer m_TreeItemContainer;
         protected TreeViewState m_TreeViewState;
 
-        protected bool m_ShowSearchBar;
+        protected bool m_ShowSearchBar = true;
 
         public bool ShowSearchBar
         {
