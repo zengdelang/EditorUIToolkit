@@ -248,14 +248,17 @@ namespace EUTK
                     var inConnections = new List<Connection>();
                     foreach (var conn in node.inConnections)
                     {
-                        foreach (var c in connectionList)
+                        if (connectionList != null)
                         {
-                            if (c.id == conn.id)
+                            foreach (var c in connectionList)
                             {
-                                inConnections.Add(c);
-                                break;
+                                if (c.id == conn.id)
+                                {
+                                    inConnections.Add(c);
+                                    break;
+                                }
                             }
-                        }
+                        }                
                     }
                     node.inConnections.Clear();
                     node.inConnections.AddRange(inConnections);
@@ -263,14 +266,17 @@ namespace EUTK
                     var outConnections = new List<Connection>();
                     foreach (var conn in node.outConnections)
                     {
-                        foreach (var c in connectionList)
+                        if (connectionList != null)
                         {
-                            if (c.id == conn.id)
+                            foreach (var c in connectionList)
                             {
-                                outConnections.Add(c);
-                                break;
+                                if (c.id == conn.id)
+                                {
+                                    outConnections.Add(c);
+                                    break;
+                                }
                             }
-                        }
+                        }                  
                     }
                     node.outConnections.Clear();
                     node.outConnections.AddRange(outConnections);

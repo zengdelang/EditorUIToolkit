@@ -748,8 +748,8 @@ namespace EUTK
                 default:
                     if (keyCode != KeyCode.Return)
                     {
-                        if (Event.current.keyCode <= KeyCode.A || Event.current.keyCode >= KeyCode.Z)
-                            break;
+                        //if (Event.current.keyCode <= KeyCode.A || Event.current.keyCode >= KeyCode.Z)
+                        //    break;
                         break;
                     }
                     goto case KeyCode.KeypadEnter;

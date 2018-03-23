@@ -127,6 +127,7 @@ namespace EUTK
                 {
                     sb.Append(retVal[i].ToString("x2"));
                 }
+                md5.Clear();
                 return sb.ToString();
             }
             catch (Exception ex)
@@ -208,7 +209,7 @@ namespace EUTK
             {
                 Directory.CreateDirectory(Path.GetDirectoryName(path));
             }
-            File.Create(path);
+            File.Create(path).Close();
         }
 
         public static void CreateParentDirecotry(string filePath)

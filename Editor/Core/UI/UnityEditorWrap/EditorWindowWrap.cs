@@ -44,6 +44,8 @@ namespace EUTK
             {
                 typeof(Rect), typeof(Vector2), popupLocationArrayType, showModeType
             }, null);
+            if (mf == null)
+                throw new NullReferenceException("mf");
             mf.Invoke(window, new object[] { buttonRect, windowSize, null, Enum.Parse(type.Assembly.GetType("UnityEditor.ShowMode"), "PopupMenuWithKeyboardFocus") });
         }
 
@@ -55,6 +57,8 @@ namespace EUTK
             var fi = typeof(EditorWindow).GetField("m_Parent", BindingFlags.NonPublic | BindingFlags.Instance);
             var obj = fi.GetValue(window);
             var p = obj.GetType().GetMethod("AddToAuxWindowList", BindingFlags.NonPublic | BindingFlags.Instance);
+            if (p == null)
+                throw new NullReferenceException("p");
             p.Invoke(obj, null);
         }
     }
